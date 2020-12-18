@@ -9,7 +9,7 @@
 
 
 module.exports = {
-  publicPath: '/',
+  publicPath: process.env.MIX_APP_VUE_PUBLIC_PATH,
   transpileDependencies: [
     'vue-echarts',
     'resize-detector'

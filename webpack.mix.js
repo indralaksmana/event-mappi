@@ -60,7 +60,7 @@ mix.js('resources/js/app.js', 'public/js')
 
 mix.webpackConfig({
     output: {
-        chunkFilename: 'js/chunks/[name].js',
+        chunkFilename: `${process.env.MIX_APP_VUE_PUBLIC_PATH}js/chunks/[name].js`,
     }
 });
 
