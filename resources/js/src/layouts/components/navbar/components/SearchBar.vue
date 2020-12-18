@@ -82,7 +82,7 @@
           @click="showFullSearch = false" />
       </div>
     </div>
-    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4" />
+    <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4 mr-4" />
   </div>
 </template>
 
