@@ -24,13 +24,15 @@ export default [
     url: '/dashboard',
     name: 'Dashboard',
     icon: 'HomeIcon',
-    i18n: 'Dashboard'
+    i18n: 'Dashboard',
+    slug: '/dashboard'
   },
   {
     url: '/organization-structure',
     name: 'Organization Structure',
     icon: 'ListIcon',
-    i18n: 'OrganizationStructure'
+    i18n: 'OrganizationStructure',
+    slug: '/organization-structure'
   }
 ]
 
