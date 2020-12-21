@@ -48,22 +48,22 @@ const router = new Router({
         {
           path: '/dashboard',
           name: 'dashboard',
-          component: () => import('./views/apps/calendar/SimpleCalendar.vue'),
+          component: () => import('./views/dashboard/Calendar.vue'),
           meta: {
             rule: 'editor',
             no_scroll: true
           }
         },
         {
-          path: '/organization-structure',
-          name: 'organization-structure',
-          component: () => import('@/views/ui-elements/data-list/list-view/DataListListView.vue'),
+          path: '/event',
+          name: 'event',
+          component: () => import('@/views/event/List.vue'),
           meta: {
             breadcrumb: [
               { title: 'Dashboard', url: '/' },
-              { title: 'Organization Structure', active: true }
+              { title: 'Event List', active: true }
             ],
-            pageTitle: 'Organization Structure',
+            pageTitle: 'Event List',
             rule: 'editor'
           }
         },
