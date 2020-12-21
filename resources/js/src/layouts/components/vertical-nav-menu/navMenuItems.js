@@ -28,11 +28,11 @@ export default [
     slug: '/dashboard'
   },
   {
-    url: '/organization-structure',
-    name: 'Organization Structure',
+    url: '/event',
+    name: 'Event List',
     icon: 'ListIcon',
-    i18n: 'OrganizationStructure',
-    slug: '/organization-structure'
+    i18n: 'EventList',
+    slug: '/event'
   }
 ]
 
