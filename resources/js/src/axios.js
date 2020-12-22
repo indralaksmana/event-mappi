@@ -1,7 +1,7 @@
 // axios
 import axios from 'axios'
 
-const baseURL = 'event-mappi/public/'
+const baseURL = ''
 
 export default axios.create({
   baseURL
