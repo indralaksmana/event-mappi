@@ -1,7 +1,7 @@
 // axios
 import axios from 'axios'
 
-const baseURL = ''
+const baseURL = process.env.MIX_APP_VUE_PUBLIC_PATH
 
 export default axios.create({
   baseURL
