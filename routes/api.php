@@ -18,17 +18,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Sector Routes
-Route::prefix('sector')->group(function () {
-    Route::get('/','SectorController@read');
-    Route::post('add','SectorController@store');
-});
+Route::group(['middleware' => 'cors'], function () {
 
-// Event Routes
-Route::prefix('event')->group(function () {
-    Route::get('/','EventController@read');
-    Route::post('add','EventController@store');
-    Route::put('edit/{id}','EventController@update');
-    Route::delete('{id}','EventController@delete');
-});
+    // Sector Routes
+    Route::prefix('sector')->group(function () {
+        Route::get('/','SectorController@read');
+        Route::post('add','SectorController@store');
+    });
 
+    // Event Routes
+    Route::prefix('event')->group(function () {
+        Route::get('/','EventController@read');
+        Route::post('add','EventController@store');
+        Route::put('edit/{id}','EventController@update');
+        Route::delete('{id}','EventController@delete');
+    });
+
+});
