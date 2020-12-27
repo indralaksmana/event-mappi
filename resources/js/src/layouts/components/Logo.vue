@@ -22,6 +22,6 @@
 <!--          </g>-->
 <!--      </g>-->
 <!--  </svg>-->
-    <img src="http://103.41.207.7/event-mappi/public/images/logo/logo.png" style="height: 30px" />
+    <img src="http://103.41.207.7/event-mappi/public/images/logo/logo.png" />
 </template>
 
