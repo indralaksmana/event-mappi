@@ -3,7 +3,7 @@ import axios from '@/axios.js'
 export default {
   addEvent ({ commit }, event) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/event/add/', {event})
+      axios.post('/api/event/add', {event})
         .then((response) => {
           commit('ADD_EVENT', Object.assign(event, {id: response.data.id}))
           resolve(response)
@@ -13,7 +13,7 @@ export default {
   },
   fetchEventListItems ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/event/')
+      axios.get('/api/event')
         .then((response) => {
           commit('SET_EVENTS', response.data.data)
           resolve(response)
