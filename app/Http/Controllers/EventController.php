@@ -7,15 +7,50 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+    public function readCalendar () {
+        try {
+
+            $calendarEvents = [];
+            $events = Event::all();
+            
+            $i = 0;
+            foreach($events as $event) {
+                $calendarEvents[$i]['classes'] = "event-success";
+                $calendarEvents[$i]['id'] = $event['_id'];
+                $calendarEvents[$i]['label'] = "business";
+                $calendarEvents[$i]['title'] = $event['name'];
+                $calendarEvents[$i]['startDate'] = $event['startDate'];
+                $calendarEvents[$i]['endDate'] = $event['endDate'];
+                $calendarEvents[$i]['url'] = "";
+
+                $i++;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => '',
+                'data' => $calendarEvents
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
     public function read(Request $request) {
         try {
             
-            $event = Event::all();
+            $events = Event::all();
             
             return response()->json([
                 'success' => true,
                 'message' => '',
-                'data' => $event
+                'data' => $events
             ], 200);
 
         } catch(\Exception $err) {
