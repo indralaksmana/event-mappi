@@ -19,7 +19,7 @@
 
             <vs-dropdown-menu>
 
-              <vs-dropdown-item>
+              <vs-dropdown-item @click.stop="destroyConfirm">
                 <span class="flex items-center">
                   <feather-icon icon="TrashIcon" svgClasses="h-4 w-4" class="mr-2" />
                   <span>Delete</span>
@@ -68,7 +68,8 @@
         <vs-th sort-key="status">Status</vs-th>
         <vs-th sort-key="dateStart">Date Start</vs-th>
         <vs-th sort-key="dateEnd">Date End</vs-th>
-        <vs-th sort-key="time">Time</vs-th>
+        <vs-th sort-key="timeStart">Time Start</vs-th>
+        <vs-th sort-key="timeEnd">Time End</vs-th>
         <vs-th sort-key="place">Place</vs-th>
         <vs-th sort-key="organizer">Organizer</vs-th>
         <vs-th sort-key="description">Description</vs-th>
@@ -104,7 +105,11 @@
               </vs-td>
 
               <vs-td>
-                <p class="event-time">{{ tr.time }}</p>
+                <p class="event-time-start">{{ tr.timeStart }}</p>
+              </vs-td>
+
+              <vs-td>
+                <p class="event-time-end">{{ tr.timeEnd }}</p>
               </vs-td>
 
               <vs-td>
@@ -121,7 +126,7 @@
 
               <vs-td class="whitespace-no-wrap">
                 <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current" @click.stop="editData(tr)" />
-                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="ml-2" @click.stop="deleteData(tr._id)" />
+                <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="ml-2" @click.stop="deleteConfirm(tr._id)" />
               </vs-td>
 
             </vs-tr>
@@ -148,7 +153,8 @@ export default {
 
       // Data Sidebar
       addNewDataSidebar: false,
-      sidebarData: {}
+      sidebarData: {},
+      activeConfirm: false
     }
   },
   computed: {
@@ -185,6 +191,48 @@ export default {
     },
     toggleDataSidebar (val = false) {
       this.addNewDataSidebar = val
+    },
+    deleteConfirm(id) {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: `Confirm`,
+        text: 'Are your sure to delete this event?',
+        accept: this.acceptDelete,
+        parameters: id 
+      })
+    },
+    acceptDelete(id) {
+      this.deleteData(id)
+      this.$vs.notify({
+        color: 'success',
+        title: 'Deleted event',
+        text: 'The selected event was successfully deleted'
+      })
+    },
+    destroyConfirm() {
+      this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: `Confirm`,
+        text: 'Are your sure to delete these event?',
+        accept: this.acceptDestroy,
+      })
+    },
+    acceptDestroy() {
+      this.deleteAll()
+      this.$vs.notify({
+        color: 'success',
+        title: 'Deleted event',
+        text: 'All event was successfully deleted'
+      })
+    },
+    deleteAll() {
+      const ids = []
+      this.selected.map(selected => {
+          ids.push(selected._id);
+      });
+      this.$store.dispatch('eventList/removeAllEvent', ids).catch(err => { console.error(err) })
     }
   },
   created () {

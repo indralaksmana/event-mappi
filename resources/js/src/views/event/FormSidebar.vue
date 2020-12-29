@@ -54,11 +54,19 @@
           </div>
         </div>
 
-        <!-- TIME -->
+        <!-- TIME START -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-          <label for="" class="vs-input--label">Time</label>
+          <label for="" class="vs-input--label">Time Start</label>
           <div class="vs-con-input">
-            <flat-pickr :config="configdateTimePicker" v-model="dataTime" class="w-full"/>
+            <flat-pickr :config="configdateTimePicker" v-model="dataTimeStart" class="w-full"/>
+          </div>
+        </div>
+
+        <!-- TIME END -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Time End</label>
+          <div class="vs-con-input">
+            <flat-pickr :config="configdateTimePicker" v-model="dataTimeEnd" class="w-full"/>
           </div>
         </div>
 
@@ -120,7 +128,8 @@ export default {
       dataStatus: '1',
       dataStartDate: null,
       dataEndDate: null,
-      dataTime: null,
+      dataTimeStart: null,
+      dataTimeEnd: null,
       dataPlace: null,
       dataOrganizer: null,
       dataDescription: null,
@@ -169,7 +178,7 @@ export default {
         this.initValues()
         this.$validator.reset()
       } else {
-        const { _id, name, category, status, sector, startDate, endDate, time, place, organizer, description } = JSON.parse(JSON.stringify(this.data))
+        const { _id, name, category, status, sector, startDate, endDate, timeStart, timeEnd, place, organizer, description } = JSON.parse(JSON.stringify(this.data))
         this.dataId = _id
         this.dataCategory = category
         this.dataName = name
@@ -177,7 +186,8 @@ export default {
         this.dataStatus = status
         this.dataStartDate = startDate
         this.dataEndDate = endDate
-        this.dataTime = time
+        this.dataTimeStart = timeStart
+        this.dataTimeEnd = timeEnd
         this.dataPlace = place
         this.dataOrganizer = organizer
         this.dataDescription = description
@@ -212,7 +222,8 @@ export default {
       this.dataStatus = '1'
       this.dataStartDate = null
       this.dataEndDate = null
-      this.dataTime = null
+      this.dataTimeStart = null
+      this.dataTimeEnd = null
       this.dataPlace = null
       this.dataOrganizer = null
       this.dataDescription = null
@@ -227,7 +238,8 @@ export default {
             status: this.dataStatus,
             startDate: this.dataStartDate,
             endDate: this.dataEndDate,
-            time: this.dataTime,
+            timeStart: this.dataTimeStart,
+            timeEnd: this.dataTimeEnd,
             place: this.dataPlace,
             organizer: this.dataOrganizer,
             description: this.dataDescription,
@@ -243,6 +255,7 @@ export default {
 
           this.$emit('closeSidebar')
           this.initValues()
+          this.$store.dispatch('eventList/fetchEventListItems')
         }
       })
     }

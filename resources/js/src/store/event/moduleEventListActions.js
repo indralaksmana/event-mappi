@@ -40,5 +40,15 @@ export default {
         })
         .catch((error) => { reject(error) })
     })
+  },
+  removeAllEvent ({ commit }, eventIds) {
+    return new Promise((resolve, reject) => {
+      axios.post(`/api/event/destroy`, {eventIds})
+        .then((response) => {
+          commit('REMOVE_EVENTS', eventIds)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
   }
 }
