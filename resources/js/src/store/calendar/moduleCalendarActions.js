@@ -22,9 +22,9 @@ export default {
   },
   fetchEvents ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/apps/calendar/events')
+      axios.get('/api/event/calendar')
         .then((response) => {
-          commit('SET_EVENTS', response.data)
+          commit('SET_EVENTS', response.data.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })

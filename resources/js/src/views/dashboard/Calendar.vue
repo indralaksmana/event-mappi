@@ -1,7 +1,7 @@
 <template>
   <div id="simple-calendar-app">
     <div class="vx-card no-scroll-content">
-      <calendar-view
+      <!-- <calendar-view
         ref="calendar"
         :displayPeriodUom="calendarView"
         :show-date="showDate"
@@ -13,7 +13,18 @@
         class="theme-default"
         @click-date="openAddNewEvent"
         @click-event="openEditEvent"
-        @drop-on-date="eventDragged">
+        @drop-on-date="eventDragged"> -->
+
+      <calendar-view
+        ref="calendar"
+        :displayPeriodUom="calendarView"
+        :show-date="showDate"
+        :events="simpleCalendarEvents"
+        enableDragDrop
+        :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
+        eventBorderHeight="0px"
+        eventContentHeight="1.65rem"
+        class="theme-default">
 
         <div slot="header" class="mb-4">
 
@@ -22,7 +33,7 @@
             <!-- Month Name -->
             <div class="vx-col w-1/3 items-center sm:flex hidden">
               <!-- Add new event button -->
-              <vs-button icon-pack="feather" icon="icon-plus" @click="promptAddNewEvent(new Date())">Add</vs-button>
+              <!-- <vs-button icon-pack="feather" icon="icon-plus" @click="promptAddNewEvent(new Date())">Add</vs-button> -->
             </div>
 
             <!-- Current Month -->
@@ -70,7 +81,7 @@
           <div class="vx-row sm:flex hidden mt-4">
             <div class="vx-col w-full flex">
               <!-- Labels -->
-              <div class="flex flex-wrap sm:justify-start justify-center">
+              <!-- <div class="flex flex-wrap sm:justify-start justify-center">
                   <div v-for="(label, index) in calendarLabels" :key="index" class="flex items-center mr-4 mb-2">
                       <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
                       <span>{{ label.text }}</span>
@@ -79,7 +90,7 @@
                       <div class="h-3 w-3 inline-block rounded-full mr-2 bg-primary"></div>
                       <span>None</span>
                   </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
