@@ -32,6 +32,7 @@ Route::group(['middleware' => 'cors'], function () {
         Route::post('add','EventController@store');
         Route::put('edit/{id}','EventController@update');
         Route::delete('{id}','EventController@delete');
+        Route::post('/destroy','EventController@deleteAll');
     });
 
 });

@@ -40,7 +40,8 @@ class EventController extends Controller
             $event->status = $payLoad['event']['status'];
             $event->startDate = $payLoad['event']['startDate'];
             $event->endDate = $payLoad['event']['endDate'];
-            $event->time = $payLoad['event']['time'];
+            $event->timeStart = $payLoad['event']['timeStart'];
+            $event->timeEnd = $payLoad['event']['timeEnd'];
             $event->place = $payLoad['event']['place'];
             $event->organizer = $payLoad['event']['organizer'];
             $event->description = $payLoad['event']['description'];
@@ -74,7 +75,8 @@ class EventController extends Controller
             $event->status = $payLoad['event']['status'];
             $event->startDate = $payLoad['event']['startDate'];
             $event->endDate = $payLoad['event']['endDate'];
-            $event->time = $payLoad['event']['time'];
+            $event->timeStart = $payLoad['event']['timeStart'];
+            $event->timeEnd = $payLoad['event']['timeEnd'];
             $event->place = $payLoad['event']['place'];
             $event->organizer = $payLoad['event']['organizer'];
             $event->description = $payLoad['event']['description'];
@@ -106,6 +108,30 @@ class EventController extends Controller
                 'success' => true,
                 'message' => 'Event successfully removed',
                 'data' => $event
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    public function deleteAll(Request $request) {
+        $payLoad = jsonRawParser($request->getContent());
+
+        try {
+            
+            $event = Event::whereIn('_id', $payLoad['eventIds']);
+            $event->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Events successfully removed',
+                'data' => []
             ], 200);
 
         } catch(\Exception $err) {

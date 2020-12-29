@@ -16,7 +16,8 @@ class Event extends Model
         'status',
         'startDate',
         'endDate',
-        'time',
+        'timeStart',
+        'timeEnd',
         'place',
         'organizer',
         'description'
