@@ -139,6 +139,7 @@
 <script>
 import FormSidebar from './FormSidebar.vue'
 import moduleEventList from '@/store/event/moduleEventList.js'
+import moduleSector from '@/store/sector/moduleSector.js'
 
 export default {
   components: {
@@ -166,8 +167,6 @@ export default {
     },
     events () {
       return this.$store.state.eventList.events
-
-      console.log('this.$store.state.eventList.events', this.$store.state.eventList.events)
     },
     queriedItems () {
       return this.$refs.table ? this.$refs.table.queriedResults.length : this.events.length
@@ -240,7 +239,12 @@ export default {
       this.$store.registerModule('eventList', moduleEventList)
       moduleEventList.isRegistered = true
     }
+    if (!moduleSector.isRegistered) {
+      this.$store.registerModule('sector', moduleSector)
+      moduleSector.isRegistered = true
+    }
     this.$store.dispatch('eventList/fetchEventListItems')
+    this.$store.dispatch('sector/fetchSectorItems')
   },
   mounted () {
     this.isMounted = true

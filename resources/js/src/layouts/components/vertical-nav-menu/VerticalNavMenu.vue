@@ -42,16 +42,6 @@
             <template v-if="showCloseButton">
               <feather-icon icon="XIcon" class="m-0 cursor-pointer" @click="$store.commit('TOGGLE_IS_VERTICAL_NAV_MENU_ACTIVE', false)" />
             </template>
-
-            <!-- Toggle Buttons -->
-            <template v-else-if="!showCloseButton && !verticalNavMenuItemsMin">
-              <feather-icon
-                id="btnVNavMenuMinToggler"
-                class="mr-0 cursor-pointer"
-                :icon="reduce ? 'CircleIcon' : 'DiscIcon'"
-                svg-classes="stroke-current text-primary"
-                @click="toggleReduce(!reduce)" />
-            </template>
           </div>
           <!-- /Menu Toggle Buttons -->
         </div>

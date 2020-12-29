@@ -134,26 +134,7 @@ export default {
       dataOrganizer: null,
       dataDescription: null,
 
-      sector_choices: [
-        {id:'Dewan Pengurus Nasional', label:'Dewan Pengurus Nasional' },
-        {id:'Dewan Pengawas Keuangan', label:'Dewan Pengawas Keuangan' },
-        {id:'Puspenit', label:'Puspenit' },
-        {id:'Direktur Eksekutif', label:'Direktur Eksekutif' },
-        {id:'Bidang Hubungan Luar Negeri', label:'Bidang Hubungan Luar Negeri' },
-        {id:'Bidang Keanggotaan', label:'Bidang Keanggotaan' },
-        {id:'Bendahara', label:'Bendahara' },
-        {id:'Sekretaris', label:'Sekretaris' },
-        {id:'KPSPI', label:'KPSPI' },
-        {id:'KUSP', label:'KUSP' },
-        {id:'KP', label:'KP' },
-        {id:'Kompartemen', label:'Kompartemen' },
-        {id:'Biro Hukum dan Advokasi', label:'Biro Hukum dan Advokasi' },
-        {id:'Riset dan Pengembangan', label:'Riset dan Pengembangan' },
-        {id:'Rapat Anggota IKJPP', label:'Rapat Anggota IKJPP' },
-        {id:'IKJPP', label:'IKJPP' },
-        {id:'Musyawarah Daerah', label:'Musyawarah Daerah' },
-        {id:'DPD', label:'DPD' },
-      ],
+      sector_choices: [],
 
       event_status_choices: [
         {text:'Unactive', value: 0},
@@ -210,7 +191,10 @@ export default {
     isFormValid () {
       return !this.errors.any() && this.dataName && this.dataCategory
     },
-    scrollbarTag () { return this.$store.getters.scrollbarTag }
+    scrollbarTag () { return this.$store.getters.scrollbarTag },
+    sectors () {
+      return this.$store.state.sector.sectors
+    }
   },
   methods: {
     initValues () {
@@ -227,6 +211,12 @@ export default {
       this.dataPlace = null
       this.dataOrganizer = null
       this.dataDescription = null
+      this.sectors.map(sector => {
+        this.sector_choices.push({
+          id: sector._id,
+          label: sector.name
+        })  
+      })
     },
     submitData () {
       this.$validator.validateAll().then(result => {
