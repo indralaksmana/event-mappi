@@ -17,7 +17,7 @@
           <div class="vx-row no-gutter justify-center items-center">
 
             <div class="vx-col hidden lg:block lg:w-1/2">
-              <img src="@assets/images/pages/login.png" alt="login" class="mx-auto">
+              <img :src="basePath + '/images/pages/login.png'" alt="login" class="mx-auto">
             </div>
 
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
@@ -47,6 +47,11 @@ import LoginJwt from './LoginJWT.vue'
 export default {
   components: {
     LoginJwt
+  },
+  computed: {
+    basePath () {
+      return (process.env.MIX_APP_VUE_BASE_PATH !== '' ? process.env.MIX_APP_VUE_BASE_PATH : '')
+    } 
   }
 }
 </script>
