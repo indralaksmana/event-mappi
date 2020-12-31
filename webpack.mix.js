@@ -14,6 +14,7 @@ require('dotenv').config();
  |
  */
 
+mix.setPublicPath(process.env.MIX_APP_VUE_PUBLIC_PATH);
 mix.js('resources/js/app.js', 'public/js')
     .webpackConfig({
         resolve: {

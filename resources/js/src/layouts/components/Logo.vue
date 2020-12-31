@@ -22,6 +22,15 @@
 <!--          </g>-->
 <!--      </g>-->
 <!--  </svg>-->
-    <img src="http://103.41.207.7/event-mappi/public/images/logo/logo.png" />
+    <img :src="basePath + '/images/logo/logo.png'" />
 </template>
 
+<script>
+export default {
+  computed: {
+    basePath () {
+      return (process.env.MIX_APP_VUE_BASE_PATH !== '' ? process.env.MIX_APP_VUE_BASE_PATH : '')
+    } 
+  }
+}
+</script>
