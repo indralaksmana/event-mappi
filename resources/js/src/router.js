@@ -25,7 +25,7 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  base: process.env.MIX_APP_VUE_PUBLIC_PATH,
+  base: process.env.MIX_APP_VUE_BASE_PATH,
   scrollBehavior () {
     return { x: 0, y: 0 }
   },
