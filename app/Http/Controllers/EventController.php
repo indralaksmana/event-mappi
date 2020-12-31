@@ -38,7 +38,7 @@ class EventController extends Controller
                 'success' => false,
                 'message' => $err->getMessage(),
                 'data' => []
-            ]);
+            ], 500);
         }
     }
 
@@ -59,7 +59,7 @@ class EventController extends Controller
                 'success' => false,
                 'message' => $err->getMessage(),
                 'data' => []
-            ]);
+            ], 500);
         }
     }
     
@@ -151,7 +151,7 @@ class EventController extends Controller
                 'success' => false,
                 'message' => $err->getMessage(),
                 'data' => []
-            ]);
+            ], 500);
         }
     }
 
@@ -175,7 +175,7 @@ class EventController extends Controller
                 'success' => false,
                 'message' => $err->getMessage(),
                 'data' => []
-            ]);
+            ], 500);
         }
     }
 }

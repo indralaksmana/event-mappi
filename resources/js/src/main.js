@@ -29,10 +29,6 @@ import './http/requests'
 import '../themeConfig.js'
 
 
-// ACL
-import acl from './acl/acl'
-
-
 // Globally Registered Components
 import './globalComponents.js'
 
@@ -97,6 +93,13 @@ require('@assets/css/iconfont.css')
 // Note: In latest version you have to add it separately
 // import 'vue-select/dist/vue-select.css';
 
+// Layouts
+import WithSidebar from './layouts/main/Main.vue'
+import FullPage from './layouts/full-page/FullPage.vue'
+
+Vue.component('with-sidebar-layout', WithSidebar);
+Vue.component('full-page-layout', FullPage);
+
 
 Vue.config.productionTip = false
 
@@ -104,6 +107,5 @@ new Vue({
   router,
   store,
   i18n,
-  acl,
   render: h => h(App)
 }).$mount('#app')

@@ -30,8 +30,7 @@
         <router-link to="/pages/forgot-password">Forgot Password?</router-link>
     </div>
     <div class="flex flex-wrap justify-between mb-3">
-      <vs-button  type="border" @click="registerUser">Register</vs-button>
-      <vs-button :disabled="!validateForm" @click="loginJWT">Login</vs-button>
+      <vs-button :disabled="!validateForm" @click="login">Login</vs-button>
     </div>
   </div>
 </template>
@@ -40,8 +39,8 @@
 export default {
   data () {
     return {
-      email: 'admin@admin.com',
-      password: 'adminadmin',
+      email: '',
+      password: '',
       checkbox_remember_me: false
     }
   },
@@ -53,7 +52,7 @@ export default {
   methods: {
     checkLogin () {
       // If user is already logged in notify
-      if (this.$store.state.auth.isUserLoggedIn()) {
+      if (this.$store.state.auth.isAuthenticated()) {
 
         // Close animation if passed as payload
         // this.$vs.loading.close()
@@ -70,7 +69,7 @@ export default {
       }
       return true
     },
-    loginJWT () {
+    login () {
 
       if (!this.checkLogin()) return
 
@@ -85,8 +84,11 @@ export default {
         }
       }
 
-      this.$store.dispatch('auth/loginJWT', payload)
-        .then(() => { this.$vs.loading.close() })
+      this.$store.dispatch('auth/login', payload)
+        .then(() => { 
+          this.$vs.loading.close()
+          this.$router.push({ path: this.$router.currentRoute.query.to || '/dashboard' })
+        })
         .catch(error => {
           this.$vs.loading.close()
           this.$vs.notify({
@@ -97,10 +99,6 @@ export default {
             color: 'danger'
           })
         })
-    },
-    registerUser () {
-      if (!this.checkLogin()) return
-      this.$router.push('/pages/register').catch(() => {})
     }
   }
 }

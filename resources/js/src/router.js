@@ -19,7 +19,7 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-import auth from '@/auth/authService'
+import store from './store/store'
 
 Vue.use(Router)
 
@@ -30,46 +30,65 @@ const router = new Router({
     return { x: 0, y: 0 }
   },
   routes: [
-
     {
-    // =============================================================================
-    // MAIN LAYOUT ROUTES
-    // =============================================================================
-      path: '',
-      component: () => import('./layouts/main/Main.vue'),
-      children: [
-        {
-          path: '/',
-          redirect: '/dashboard'
-        },
-        {
-          path: '/dashboard',
-          name: 'dashboard',
-          component: () => import('./views/dashboard/Calendar.vue'),
-          meta: {
-            rule: 'editor',
-            no_scroll: true
-          }
-        },
-        {
-          path: '/event',
-          name: 'event',
-          component: () => import('@/views/event/List.vue'),
-          meta: {
-            breadcrumb: [
-              { title: 'Dashboard', url: '/' },
-              { title: 'Event List', active: true }
-            ],
-            pageTitle: 'Event List',
-            rule: 'editor'
-          }
-        },
-      ]
+      path: '/',
+      redirect: { name: 'auth-login' }
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import('./views/dashboard/Calendar.vue'),
+      meta: {
+        no_scroll: true,
+        layout: 'with-sidebar',
+        authRequired: true
+      }
+    },
+    {
+      path: '/event',
+      name: 'event',
+      component: () => import('@/views/event/List.vue'),
+      meta: {
+        breadcrumb: [
+          { title: 'Dashboard', url: '/' },
+          { title: 'Event List', active: true }
+        ],
+        pageTitle: 'Event List',
+        layout: 'with-sidebar',
+        authRequired: true
+      }
+    },
+    {
+      path: '/auth/login',
+      name: 'auth-login',
+      component: () => import('@/views/auth/login/Login.vue'),
+      meta: {
+        layout: 'full-page',
+        authRequired: false
+      }
+    },
+    {
+      path: '/not-found',
+      name: 'page-not-found',
+      component: () => import('@/views/Error404.vue'),
+      meta: {
+        layout: 'full-page',
+        authRequired: false
+      }
+    },
+    {
+      path: '/not-authorized',
+      name: 'page-not-authorized',
+      component: () => import('@/views/NotAuthorized.vue'),
+      meta: {
+        layout: 'full-page',
+        authRequired: false
+      }
     },
     // Redirect to 404 page, if no match found
     {
       path: '*',
-      redirect: '/pages/error-404'
+      redirect: { name: 'page-not-found' }
     }
   ]
 })
@@ -86,8 +105,14 @@ router.beforeEach((to, from, next) => {
 
     // If auth required, check login. If login fails redirect to login page
     if (to.meta.authRequired) {
-      if (!(auth.isAuthenticated())) {
-        router.push({ path: '/pages/login', query: { to: to.path } })
+      if (!(store.state.auth.isAuthenticated())) {
+        router.push({ path: '/auth/login', query: { to: to.path } })
+      }
+    }
+
+    if (to.name === 'auth-login' || to.path === '/') {
+      if (store.state.auth.isAuthenticated()) {
+        router.push({ path: '/dashboard' })
       }
     }
 

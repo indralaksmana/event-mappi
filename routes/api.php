@@ -14,26 +14,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::group(['middleware' => ['api', 'cors']], function () {
+        
+    Route::post('auth/login', 'AuthController@login');
+    
+    Route::post('auth/refresh-token', 'AuthController@refresh');
 
-Route::group(['middleware' => 'cors'], function () {
+    Route::group(['middleware' => 'auth'], function(){
+    
+        // Sector Routes
+        Route::prefix('sector')->group(function () {
+            Route::get('/','SectorController@read');
+            Route::post('add','SectorController@store');
+        });
 
-    // Sector Routes
-    Route::prefix('sector')->group(function () {
-        Route::get('/','SectorController@read');
-        Route::post('add','SectorController@store');
-    });
+        // Event Routes
+        Route::prefix('event')->group(function () {
+            Route::get('/','EventController@read');
+            Route::get('calendar','EventController@readCalendar');
+            Route::post('add','EventController@store');
+            Route::put('edit/{id}','EventController@update');
+            Route::delete('{id}','EventController@delete');
+            Route::post('/destroy','EventController@deleteAll');
+        });
 
-    // Event Routes
-    Route::prefix('event')->group(function () {
-        Route::get('/','EventController@read');
-        Route::get('calendar','EventController@readCalendar');
-        Route::post('add','EventController@store');
-        Route::put('edit/{id}','EventController@update');
-        Route::delete('{id}','EventController@delete');
-        Route::post('/destroy','EventController@deleteAll');
+        // Auth Routes
+        Route::get('auth/user-profile', 'AuthController@userProfile');  
+
     });
 
 });

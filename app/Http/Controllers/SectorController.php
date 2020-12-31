@@ -25,7 +25,7 @@ class SectorController extends Controller
                 'success' => false,
                 'message' => $err->getMessage(),
                 'data' => []
-            ]);
+            ], 500);
         }
           
     }
