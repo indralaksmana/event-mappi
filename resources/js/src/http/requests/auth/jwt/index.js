@@ -42,6 +42,12 @@ export default {
         return retryOriginalRequest
       }
       return Promise.reject(error)
+    }),
+    axios.interceptors.request.use(function (config) {
+        const token = localStorage.getItem('accessToken')
+        config.headers.Authorization = `Bearer ${token}`
+    
+        return config;
     })
   },
   login (email, pwd) {
@@ -50,14 +56,10 @@ export default {
       password: pwd
     })
   },
-  registerUser (name, email, pwd) {
-    return axios.post('/api/auth/register', {
-      displayName: name,
-      email,
-      password: pwd
-    })
-  },
   refreshToken () {
-    return axios.post('/api/auth/refresh-token', {accessToken: localStorage.getItem('accessToKen')})
+    return axios.post('/api/auth/refresh-token')
+  },
+  userInfo () {
+    return axios.get('/api/auth/user-profile')
   }
 }

@@ -9,7 +9,7 @@
 
 
 <template>
-  <div id="app" :class="vueAppClasses">
+  <div id="app" :class="vueAppClasses" :is="layout">
     <router-view @setAppClasses="setAppClasses" />
   </div>
 </template>
@@ -18,7 +18,14 @@
 import themeConfig from '@/../themeConfig.js'
 import jwt         from '@/http/requests/auth/jwt/index.js'
 
+const default_layout = "full-page"
+
 export default {
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || default_layout) + '-layout'
+    }
+  },
   data () {
     return {
       vueAppClasses: []
