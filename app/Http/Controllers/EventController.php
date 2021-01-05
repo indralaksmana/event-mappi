@@ -12,7 +12,7 @@ class EventController extends Controller
 
             $calendarEvents = [];
             $publicEvents = Event::where('type', 'public')->get();
-            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])->get();
             $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
@@ -48,8 +48,8 @@ class EventController extends Controller
         try {
             
             $publicEvents = Event::where('type', 'public')->get();
-            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
-            $events = $publicEvents->merge($specificEvents);
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])->get();
+            $events = count($publicEvents) > 0 ? $publicEvents->merge($specificEvents) : $specificEvents;
             
             return response()->json([
                 'success' => true,
@@ -84,6 +84,10 @@ class EventController extends Controller
             $event->place = $payLoad['event']['place'];
             $event->organizer = $payLoad['event']['organizer'];
             $event->description = $payLoad['event']['description'];
+            $event->type = $payLoad['event']['type'];
+            $event->forUsers = $payLoad['event']['forUsers'];
+            $event->createdBy = auth()->user()->_id;
+            $event->updatedBy = null;
             $event->save();
             
             return response()->json([
@@ -119,6 +123,9 @@ class EventController extends Controller
             $event->place = $payLoad['event']['place'];
             $event->organizer = $payLoad['event']['organizer'];
             $event->description = $payLoad['event']['description'];
+            $event->type = $payLoad['event']['type'];
+            $event->forUsers = $payLoad['event']['forUsers'];
+            $event->updatedBy = auth()->user()->_id;
             $event->save();
             
             return response()->json([

@@ -73,6 +73,7 @@
         <vs-th sort-key="place">Place</vs-th>
         <vs-th sort-key="organizer">Organizer</vs-th>
         <vs-th sort-key="description">Description</vs-th>
+        <vs-th sort-key="type">Type</vs-th>
         <vs-th>Action</vs-th>
       </template>
 
@@ -93,7 +94,7 @@
               </vs-td>
 
               <vs-td>
-                <vs-chip :color="getOrderStatusColor(tr.status)" class="event-status">{{ tr.status === '1' ? 'Active' : 'Unactive' }}</vs-chip>
+                <vs-chip :color="getEventStatusColor(tr.status)" class="event-status">{{ parseInt(tr.status, 0) === 1 ? 'Active' : 'Unactive' }}</vs-chip>
               </vs-td>
 
               <vs-td>
@@ -124,6 +125,10 @@
                 <p class="event-description">{{ tr.description }}</p>
               </vs-td>
 
+              <vs-td>
+                <vs-chip :color="getEventTypeColor(tr.type)" class="event-type">{{ getTitleCase(tr.type) }}</vs-chip>
+              </vs-td>
+
               <vs-td class="whitespace-no-wrap">
                 <feather-icon icon="EditIcon" svgClasses="w-5 h-5 hover:text-primary stroke-current" @click.stop="editData(tr)" />
                 <feather-icon icon="TrashIcon" svgClasses="w-5 h-5 hover:text-danger stroke-current" class="ml-2" @click.stop="deleteConfirm(tr._id)" />
@@ -140,6 +145,7 @@
 import FormSidebar from './FormSidebar.vue'
 import moduleEventList from '@/store/event/moduleEventList.js'
 import moduleSector from '@/store/sector/moduleSector.js'
+import moduleUser from '@/store/user/moduleUser.js'
 
 export default {
   components: {
@@ -184,9 +190,18 @@ export default {
       this.sidebarData = data
       this.toggleDataSidebar(true)
     },
-    getOrderStatusColor (status) {
-      if (status === '1') return 'success'
-      if (status === '0')  return 'danger'
+    getEventStatusColor (status) {
+      if (parseInt(status) === 1) return 'success'
+      if (parseInt(status) === 0)  return 'danger'
+    },
+    getEventTypeColor (type) {
+      if (type === 'public') return 'primary'
+      if (type === 'specific')  return 'warning'
+    },
+    getTitleCase(str) {
+      return str.toLowerCase().split(' ').map(function (word) {
+        return (word.charAt(0).toUpperCase() + word.slice(1));
+      }).join(' ');
     },
     toggleDataSidebar (val = false) {
       this.addNewDataSidebar = val
@@ -243,8 +258,13 @@ export default {
       this.$store.registerModule('sector', moduleSector)
       moduleSector.isRegistered = true
     }
+    if (!moduleUser.isRegistered) {
+      this.$store.registerModule('user', moduleUser)
+      moduleUser.isRegistered = true
+    }
     this.$store.dispatch('eventList/fetchEventListItems')
     this.$store.dispatch('sector/fetchSectorItems')
+    this.$store.dispatch('user/fetchUserItems')
   },
   mounted () {
     this.isMounted = true

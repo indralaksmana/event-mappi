@@ -20,6 +20,10 @@ class Event extends Model
         'timeEnd',
         'place',
         'organizer',
-        'description'
+        'description',
+        'type',
+        'forUsers',
+        'createdBy',
+        'updatedBy'
     ];
 }

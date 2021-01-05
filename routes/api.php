@@ -41,6 +41,11 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         // Auth Routes
         Route::get('auth/user-profile', 'AuthController@userProfile');  
 
+        // User Routes
+        Route::prefix('user')->group(function () {
+            Route::get('/','UserController@read');
+        });
+
     });
 
 });
