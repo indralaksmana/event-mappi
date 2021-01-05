@@ -41,16 +41,9 @@ export default {
   methods: {
     logout () {
 
-      // If JWT login
-      if (localStorage.getItem('accessToken')) {
-        localStorage.removeItem('accessToken')
-        this.$router.push('/auth/login').catch(() => {})
-      }
-
-      // Change role on logout. Same value as initialRole of acj.js
+      localStorage.removeItem('accessToken')
       localStorage.removeItem('userInfo')
 
-      // This is just for demo Purpose. If user clicks on logout -> redirect
       this.$router.push('/auth/login').catch(() => {})
     }
   }

@@ -11,7 +11,9 @@ class EventController extends Controller
         try {
 
             $calendarEvents = [];
-            $events = Event::all();
+            $publicEvents = Event::where('type', 'public')->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
+            $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
             foreach($events as $event) {
@@ -45,7 +47,9 @@ class EventController extends Controller
     public function read(Request $request) {
         try {
             
-            $events = Event::all();
+            $publicEvents = Event::where('type', 'public')->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
+            $events = $publicEvents->merge($specificEvents);
             
             return response()->json([
                 'success' => true,
