@@ -86,6 +86,26 @@
           </div>
         </div>
 
+        <!-- TYPE -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Type</label>
+          <div class="vs-con-input">
+            <ul class="mt-1 ml-2">
+              <li :key="item.value" v-for="item in event_type_choices" class="float-right mr-10">
+                <vs-radio v-model="dataType" :vs-value="item.value" @change="onchangeType">{{ item.text }}</vs-radio>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- FOR USERS -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary" v-if="dataType==='specific'">
+          <label for="" class="vs-input--label">For Users</label>
+          <div class="vs-con-input">
+            <v-select multiple :closeOnSelect="false" v-model="dataForUsers" :options="user_choices" item-value="id" item-text="label" class="w-full" />
+          </div>
+        </div>
+
       </div>
     </component>
 
@@ -125,7 +145,7 @@ export default {
       dataName: null,
       dataCategory: null,
       dataSector: [],
-      dataStatus: '1',
+      dataStatus: null,
       dataStartDate: null,
       dataEndDate: null,
       dataTimeStart: null,
@@ -133,6 +153,8 @@ export default {
       dataPlace: null,
       dataOrganizer: null,
       dataDescription: null,
+      dataType: null,
+      dataForUsers: [],
 
       sector_choices: [],
 
@@ -140,6 +162,14 @@ export default {
         {text:'Unactive', value: 0},
         {text:'Active', value: 1}
       ],
+
+      event_type_choices: [
+        {text:'Specific', value: 'specific'},
+        {text:'Public', value: 'public'}
+      ],
+
+      user_choices: [],
+
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
         wheelSpeed: .60
@@ -159,7 +189,7 @@ export default {
         this.initValues()
         this.$validator.reset()
       } else {
-        const { _id, name, category, status, sector, startDate, endDate, timeStart, timeEnd, place, organizer, description } = JSON.parse(JSON.stringify(this.data))
+        const { _id, name, category, status, sector, startDate, endDate, timeStart, timeEnd, place, organizer, description, type, forUsers } = JSON.parse(JSON.stringify(this.data))
         this.dataId = _id
         this.dataCategory = category
         this.dataName = name
@@ -172,6 +202,15 @@ export default {
         this.dataPlace = place
         this.dataOrganizer = organizer
         this.dataDescription = description
+        this.dataType = type
+        this.dataForUsers = forUsers
+        this.user_choices = []
+        this.users.map(user => {
+          this.user_choices.push({
+            id: user._id,
+            label: user.name
+          })  
+        })
       }
     }
   },
@@ -194,6 +233,9 @@ export default {
     scrollbarTag () { return this.$store.getters.scrollbarTag },
     sectors () {
       return this.$store.state.sector.sectors
+    },
+    users () {
+      return this.$store.state.user.users
     }
   },
   methods: {
@@ -203,7 +245,7 @@ export default {
       this.dataName = null
       this.dataCategory = null
       this.dataSector = []
-      this.dataStatus = '1'
+      this.dataStatus = null
       this.dataStartDate = null
       this.dataEndDate = null
       this.dataTimeStart = null
@@ -217,6 +259,14 @@ export default {
           label: sector.name
         })  
       })
+      this.users.map(user => {
+        this.user_choices.push({
+          id: user._id,
+          label: user.name
+        })  
+      })
+      this.dataType = null
+      this.dataForUsers = []
     },
     submitData () {
       this.$validator.validateAll().then(result => {
@@ -233,6 +283,8 @@ export default {
             place: this.dataPlace,
             organizer: this.dataOrganizer,
             description: this.dataDescription,
+            type: this.dataType,
+            forUsers: this.dataForUsers
           }
 
           if (this.dataId !== null) {
@@ -248,6 +300,11 @@ export default {
           this.$store.dispatch('eventList/fetchEventListItems')
         }
       })
+    },
+    onchangeType() {
+      if (this.dataType === 'public') {
+        this.dataForUsers = []
+      }
     }
   }
 }

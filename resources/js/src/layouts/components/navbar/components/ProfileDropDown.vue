@@ -43,6 +43,7 @@ export default {
 
       localStorage.removeItem('accessToken')
       localStorage.removeItem('userInfo')
+      localStorage.clear()
 
       this.$router.push('/auth/login').catch(() => {})
     }
