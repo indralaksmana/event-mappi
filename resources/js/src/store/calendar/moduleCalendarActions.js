@@ -21,9 +21,8 @@ export default {
     })
   },
   fetchEvents ({ commit }) {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     return new Promise((resolve, reject) => {
-      axios.get(`/api/event/calendar/${userInfo._id}`)
+      axios.get('/api/event/calendar')
         .then((response) => {
           commit('SET_EVENTS', response.data.data)
           resolve(response)

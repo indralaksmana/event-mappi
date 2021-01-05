@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    public function readCalendar ($userId) {
+    public function readCalendar () {
         try {
 
             $calendarEvents = [];
             $publicEvents = Event::where('type', 'public')->get();
-            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [$userId])->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
             $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
@@ -47,7 +47,9 @@ class EventController extends Controller
     public function read(Request $request) {
         try {
             
-            $events = Event::all();
+            $publicEvents = Event::where('type', 'public')->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [auth()->user()->_id])->get();
+            $events = $publicEvents->merge($specificEvents);
             
             return response()->json([
                 'success' => true,
