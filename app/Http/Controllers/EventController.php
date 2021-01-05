@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    public function readCalendar () {
+    public function readCalendar ($userId) {
         try {
 
             $calendarEvents = [];
-            $events = Event::all();
+            $publicEvents = Event::where('type', 'public')->get();
+            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', [$userId])->get();
+            $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
             foreach($events as $event) {
