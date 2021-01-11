@@ -50,10 +50,24 @@ const router = new Router({
       component: () => import('@/views/event/List.vue'),
       meta: {
         breadcrumb: [
-          { title: 'Dashboard', url: '/' },
+          { title: 'Event', url: '/' },
           { title: 'Event List', active: true }
         ],
         pageTitle: 'Event List',
+        layout: 'with-sidebar',
+        authRequired: true
+      }
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('@/views/user/List.vue'),
+      meta: {
+        breadcrumb: [
+          { title: 'User', url: '/' },
+          { title: 'User List', active: true }
+        ],
+        pageTitle: 'User List',
         layout: 'with-sidebar',
         authRequired: true
       }
@@ -103,20 +117,20 @@ router.afterEach(() => {
 
 router.beforeEach((to, from, next) => {
 
-    // If auth required, check login. If login fails redirect to login page
-    if (to.meta.authRequired) {
-      if (!(store.state.auth.isAuthenticated())) {
-        router.push({ path: '/auth/login', query: { to: to.path } })
-      }
+  // If auth required, check login. If login fails redirect to login page
+  if (to.meta.authRequired) {
+    if (!(store.state.auth.isAuthenticated())) {
+      router.push({ path: '/auth/login', query: { to: to.path } })
     }
+  }
 
-    if (to.name === 'auth-login' || to.path === '/') {
-      if (store.state.auth.isAuthenticated()) {
-        router.push({ path: '/dashboard' })
-      }
+  if (to.name === 'auth-login' || to.path === '/') {
+    if (store.state.auth.isAuthenticated()) {
+      router.push({ path: '/dashboard' })
     }
+  }
 
-    return next()
+  return next()
 
 })
 

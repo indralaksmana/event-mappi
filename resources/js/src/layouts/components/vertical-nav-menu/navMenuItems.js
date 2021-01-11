@@ -33,6 +33,13 @@ export default [
     icon: 'ListIcon',
     i18n: 'EventList',
     slug: '/event'
+  },
+  {
+    url: '/user',
+    name: 'User List',
+    icon: 'UserIcon',
+    i18n: 'UserList',
+    slug: '/user'
   }
 ]
 

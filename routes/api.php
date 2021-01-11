@@ -44,6 +44,7 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         // User Routes
         Route::prefix('user')->group(function () {
             Route::get('/','UserController@read');
+            Route::post('add','UserController@store');
         });
 
     });

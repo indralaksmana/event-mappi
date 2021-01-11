@@ -39,7 +39,12 @@ export default {
   },
   fetchAccessToken () {
     return new Promise((resolve) => {
-      jwt.refreshToken().then(response => { resolve(response) })
+      jwt.refreshToken().then(response => { resolve(response) }).catch(() => {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('userInfo')
+        localStorage.clear()
+        window.location.replace('/auth/login')
+      })
     })
   }
 }
