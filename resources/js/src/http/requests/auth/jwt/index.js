@@ -15,6 +15,7 @@ function addSubscriber (callback) {
 
 export default {
   init () {
+    // eslint-disable-next-line no-unused-expressions
     axios.interceptors.response.use(function (response) {
       return response
     }, function (error) {
@@ -44,10 +45,10 @@ export default {
       return Promise.reject(error)
     }),
     axios.interceptors.request.use(function (config) {
-        const token = localStorage.getItem('accessToken')
-        config.headers.Authorization = `Bearer ${token}`
+      const token = localStorage.getItem('accessToken')
+      config.headers.Authorization = `Bearer ${token}`
     
-        return config;
+      return config
     })
   },
   login (email, pwd) {

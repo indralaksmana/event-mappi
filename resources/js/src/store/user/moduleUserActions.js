@@ -3,12 +3,14 @@ import axios from '@/axios.js'
 export default {
   addUser ({ commit }, user) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/user/add', {user})
-        .then((response) => {
-          commit('ADD_USER', Object.assign(user, {id: response.data.id}))
-          resolve(response)
-        })
-        .catch((error) => { reject(error) })
+      axios.post('/api/user/add', user, {
+        headers:{
+          'Content-Type' : 'multipart/form-data'
+        }
+      }).then((response) => {
+        commit('ADD_USER', Object.assign(response.data.data, {id: response.data.id}))
+        resolve(response)
+      }).catch((error) => { reject(error) })
     })
   },
   fetchUserItems ({ commit }) {
@@ -21,14 +23,16 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  updateUser ({ commit }, user) {
+  updateUser ({ commit }, { user, id }) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/user/edit/${user.id}`, {user})
-        .then((response) => {
-          commit('UPDATE_USER', response.data)
-          resolve(response)
-        })
-        .catch((error) => { reject(error) })
+      axios.post(`/api/user/edit/${id}`, user, {
+        headers:{
+          'Content-Type' : 'multipart/form-data'
+        }
+      }).then((response) => {
+        commit('UPDATE_USER', response.data.data)
+        resolve(response)
+      }).catch((error) => { reject(error) })
     })
   },
   removeUser ({ commit }, userId) {
@@ -43,7 +47,7 @@ export default {
   },
   removeAllUser ({ commit }, userIds) {
     return new Promise((resolve, reject) => {
-      axios.post(`/api/user/destroy`, {userIds})
+      axios.post('/api/user/destroy', {userIds})
         .then((response) => {
           commit('REMOVE_USERS', userIds)
           resolve(response)

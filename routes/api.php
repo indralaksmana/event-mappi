@@ -44,6 +44,10 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         // User Routes
         Route::prefix('user')->group(function () {
             Route::get('/','UserController@read');
+            Route::post('add','UserController@store');
+            Route::post('edit/{id}','UserController@update');
+            Route::delete('{id}','UserController@delete');
+            Route::post('/destroy','UserController@deleteAll');
         });
 
     });
