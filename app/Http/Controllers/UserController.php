@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -42,7 +43,7 @@ class UserController extends Controller
             $user = new User();
             $user->name = $payLoad['name'];
             $user->email = $payLoad['email'];
-            $user->password = $payLoad['password'];
+            $user->password = Hash::make($payLoad['password']);
             $user->sector = $payLoad['sector'];
             $user->department = $payLoad['department'];
             $user->role = $payLoad['role'];
@@ -69,15 +70,58 @@ class UserController extends Controller
 
     }
 
-    public function edit(Request $request) {
-        
-    }
+    public function update(Request $request, $id) {
 
-    public function update(Request $request) {
-        
+        $payLoad = jsonRawParser($request->get('data'));
+
+        try {
+
+            $user = User::find($id);
+            $user->password;
+            $user->name = $payLoad['name'];
+            $user->email = $payLoad['email'];
+            
+            if ($user->password !== $payLoad['password']) {
+                $user->password = Hash::make($payLoad['password']);   
+            }
+
+            $user->sector = $payLoad['sector'];
+            $user->department = $payLoad['department'];
+            $user->role = $payLoad['role'];
+            $user->notes = $payLoad['notes'];
+            
+            if ($request->hasFile('photo')) {
+                $fileName = time().'_'.$request->photo->getClientOriginalName();
+                $filePath = $request->file('photo')->storeAs('uploads', $fileName, 'public');
+                $user->photo = '/storage/' . $filePath;
+            }
+            
+            $user->createdBy = auth()->user()->_id;
+            $user->updatedBy = null;
+            $user->save();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'User successfully updated',
+                'data' => $user
+            ], 201);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => $payLoad
+            ], 500);
+        }
+
     }
 
     public function delete(Request $request) {
+        
+    }
+
+    public function deleteAll(Request $request) {
         
     }
 }

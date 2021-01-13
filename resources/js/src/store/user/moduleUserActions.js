@@ -23,14 +23,16 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
-  updateUser ({ commit }, user) {
+  updateUser ({ commit }, { user, id }) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/user/edit/${user.id}`, {user})
-        .then((response) => {
-          commit('UPDATE_USER', response.data)
-          resolve(response)
-        })
-        .catch((error) => { reject(error) })
+      axios.post(`/api/user/edit/${id}`, user, {
+        headers:{
+          'Content-Type' : 'multipart/form-data'
+        }
+      }).then((response) => {
+        commit('UPDATE_USER', response.data.data)
+        resolve(response)
+      }).catch((error) => { reject(error) })
     })
   },
   removeUser ({ commit }, userId) {

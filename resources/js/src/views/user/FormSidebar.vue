@@ -209,16 +209,12 @@ export default {
             role: this.dataRole
           }
 
-          if (this.dataId !== null) {
-            obj.id = this.dataId
-          }
-
           const formData = new FormData()
           formData.append('photo', this.dataImg)
           formData.append('data', JSON.stringify(obj))
 
           if (this.dataId !== null) {
-            this.$store.dispatch('user/updateUser', formData).catch(err => { console.error(err) })
+            this.$store.dispatch('user/updateUser', { user: formData, id: this.dataId }).catch(err => { console.error(err) })
           } else {
             this.$store.dispatch('user/addUser', formData).catch(err => { console.error(err) })
           }
