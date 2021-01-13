@@ -117,11 +117,49 @@ class UserController extends Controller
 
     }
 
-    public function delete(Request $request) {
-        
+    public function delete($id) {
+        try {
+            
+            $user = User::find($id);
+            $user->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'User successfully removed',
+                'data' => $user
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     public function deleteAll(Request $request) {
-        
+        $payLoad = jsonRawParser($request->getContent());
+
+        try {
+            
+            $user = User::whereIn('_id', $payLoad['userIds']);
+            $user->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Users successfully removed',
+                'data' => []
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 }
