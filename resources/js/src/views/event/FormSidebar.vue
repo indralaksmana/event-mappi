@@ -301,7 +301,7 @@ export default {
         }
       })
     },
-    onchangeType() {
+    onchangeType () {
       if (this.dataType === 'public') {
         this.dataForUsers = []
       }

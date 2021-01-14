@@ -9,21 +9,26 @@
 
 
 export default {
-  ADD_EVENT (state, event) {
-    state.events.push(event)
-  },
   SET_EVENTS (state, events) {
     state.events = events
   },
-  SET_LABELS (state, labels) {
-    state.eventLabels = labels
-  },
-  UPDATE_EVENT (state, event) {
-    const eventIndex = state.events.findIndex((e) => e.id === event.id)
-    Object.assign(state.events[eventIndex], event)
-  },
-  REMOVE_EVENT (state, eventId) {
-    const eventIndex = state.events.findIndex((e) => e.id === eventId)
-    state.events.splice(eventIndex, 1)
+  SET_EVENT (state, event) {
+    const modEvent = {
+      id: event._id,
+      category: event.category,
+      name: event.name,
+      sector: event.sector.label,
+      status: event.status,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      timeStart: event.timeStart,
+      timeEnd: event.timeEnd,
+      place: event.place,
+      organizer: event.organizer,
+      description: event.description,
+      type: event.type,
+      forUsers: event.forUsers
+    }
+    state.event = modEvent
   }
 }

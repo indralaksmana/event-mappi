@@ -66,6 +66,27 @@ class EventController extends Controller
             ], 500);
         }
     }
+
+    public function readDetail($id) {
+        try {
+            
+            $event = Event::find($id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => '',
+                'data' => $event
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
     
     public function store(Request $request) {
         $payLoad = jsonRawParser($request->getContent());

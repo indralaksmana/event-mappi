@@ -1,19 +1,6 @@
 <template>
   <div id="simple-calendar-app">
     <div class="vx-card no-scroll-content">
-      <!-- <calendar-view
-        ref="calendar"
-        :displayPeriodUom="calendarView"
-        :show-date="showDate"
-        :events="simpleCalendarEvents"
-        enableDragDrop
-        :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
-        eventBorderHeight="0px"
-        eventContentHeight="1.65rem"
-        class="theme-default"
-        @click-date="openAddNewEvent"
-        @click-event="openEditEvent"
-        @drop-on-date="eventDragged"> -->
 
       <calendar-view
         ref="calendar"
@@ -24,17 +11,12 @@
         :eventTop="windowWidth <= 400 ? '2rem' : '3rem'"
         eventBorderHeight="0px"
         eventContentHeight="1.65rem"
-        class="theme-default">
+        class="theme-default"
+        @click-event="openDetailEvent">
 
         <div slot="header" class="mb-4">
 
           <div class="vx-row no-gutter">
-
-            <!-- Month Name -->
-            <div class="vx-col w-1/3 items-center sm:flex hidden">
-              <!-- Add new event button -->
-              <!-- <vs-button icon-pack="feather" icon="icon-plus" @click="promptAddNewEvent(new Date())">Add</vs-button> -->
-            </div>
 
             <!-- Current Month -->
             <div class="vx-col sm:w-1/3 w-full sm:my-0 my-3 flex sm:justify-end justify-center order-last">
@@ -78,115 +60,123 @@
             </div>
           </div>
 
-          <div class="vx-row sm:flex hidden mt-4">
-            <div class="vx-col w-full flex">
-              <!-- Labels -->
-              <!-- <div class="flex flex-wrap sm:justify-start justify-center">
-                  <div v-for="(label, index) in calendarLabels" :key="index" class="flex items-center mr-4 mb-2">
-                      <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                      <span>{{ label.text }}</span>
-                  </div>
-                  <div class="flex items-center mr-4 mb-2">
-                      <div class="h-3 w-3 inline-block rounded-full mr-2 bg-primary"></div>
-                      <span>None</span>
-                  </div>
-              </div> -->
-            </div>
-          </div>
         </div>
       </calendar-view>
     </div>
 
-    <!-- ADD EVENT -->
+    <!-- DETAIL EVENT -->
     <vs-prompt
         class="calendar-event-dialog"
-        title="Add Event"
-        accept-text= "Add Event"
-        @accept="addEvent"
-        :is-valid="validForm"
-        :active.sync="activePromptAddEvent">
-
-        <div class="calendar__label-container flex">
-
-            <vs-chip v-if="labelLocal != 'none'" class="text-white" :class="'bg-' + labelColor(labelLocal)">{{ labelLocal }}</vs-chip>
-
-            <vs-dropdown vs-custom-content vs-trigger-click class="ml-auto my-2 cursor-pointer">
-
-                <feather-icon icon="TagIcon" svgClasses="h-5 w-5" class="cursor-pointer" @click.prevent></feather-icon>
-
-                <vs-dropdown-menu style="z-index: 200001">
-                        <vs-dropdown-item v-for="(label, index) in calendarLabels" :key="index" @click="labelLocal = label.value">
-                            <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                            <span>{{ label.text }}</span>
-                        </vs-dropdown-item>
-
-                        <vs-dropdown-item @click="labelLocal = 'none'">
-                            <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-                            <span>None</span>
-                        </vs-dropdown-item>
-                </vs-dropdown-menu>
-            </vs-dropdown>
-
-        </div>
-
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title" v-model="title"></vs-input>
-        <div class="my-4">
-            <small class="date-label">Start Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" name="start-date" v-model="startDate" :disabled="disabledFrom"></datepicker>
-        </div>
-        <div class="my-4">
-            <small class="date-label">End Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date" v-model="endDate"></datepicker>
-        </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url" :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
-
-    </vs-prompt>
-
-    <!-- EDIT EVENT -->
-    <vs-prompt
-        class="calendar-event-dialog"
-        title="Edit Event"
-        accept-text= "Submit"
-        cancel-text = "Remove"
+        title="Detail Event"
         button-cancel = "border"
-        @cancel="removeEvent"
-        @accept="editEvent"
+        cancel-text = "Close"
         :is-valid="validForm"
-        :active.sync="activePromptEditEvent">
+        :active.sync="activePromptEditEvent"
+        v-if="eventDetail !== undefined">
 
-        <div class="calendar__label-container flex">
-
-            <vs-chip v-if="labelLocal != 'none'" class="text-white" :class="'bg-' + labelColor(labelLocal)">{{ labelLocal }}</vs-chip>
-
-            <vs-dropdown vs-custom-content class="ml-auto my-2 cursor-pointer">
-
-                <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
-
-                <vs-dropdown-menu style="z-index: 200001">
-                        <vs-dropdown-item v-for="(label, index) in calendarLabels" :key="index" @click="labelLocal = label.value">
-                            <div class="h-3 w-3 inline-block rounded-full mr-2" :class="'bg-' + label.color"></div>
-                            <span>{{ label.text }}</span>
-                        </vs-dropdown-item>
-
-                        <vs-dropdown-item @click="labelLocal = 'none'">
-                            <div class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"></div>
-                            <span>None</span>
-                        </vs-dropdown-item>
-                </vs-dropdown-menu>
-            </vs-dropdown>
-
+        <!-- NAME -->
+        <div class="vs-component vs-con-input-label vs-input mt-0 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Name</label>
+          <div class="vs-con-input">
+            {{ eventDetail.name }}
+          </div>
         </div>
 
-        <vs-input name="event-name" v-validate="'required'" class="w-full" label-placeholder="Event Title" v-model="title"></vs-input>
-        <div class="my-4">
-            <small class="date-label">Start Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesFrom" name="start-date" v-model="startDate"></datepicker>
+        <!-- CATEGORY -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Category</label>
+          <div class="vs-con-input">
+            {{ eventDetail.category }}
+          </div>
         </div>
-        <div class="my-4">
-            <small class="date-label">End Date</small>
-            <datepicker :language="$vs.rtl ? langHe : langEn" :disabledDates="disabledDatesTo" name="end-date" v-model="endDate"></datepicker>
+
+        <!-- SECTOR -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Sector</label>
+          <div class="vs-con-input">
+            {{ eventDetail.sector }}
+          </div>
         </div>
-        <vs-input name="event-url" v-validate="'url'" class="w-full mt-6" label-placeholder="Event URL" v-model="url" :color="!errors.has('event-url') ? 'success' : 'danger'"></vs-input>
+
+        <!-- STATUS -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Status</label>
+          <div class="vs-con-input">
+            <vs-chip :color="getEventStatusColor(eventDetail.status)" class="event-status">{{ parseInt(eventDetail.status, 0) === 1 ? 'Active' : 'Unactive' }}</vs-chip>
+          </div>
+        </div>
+
+        <!-- START DATE -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Start Date</label>
+          <div class="vs-con-input">
+            {{ $options.filters.date(eventDetail.startDate) }}
+          </div>
+        </div>
+
+        <!-- END DATE -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">End Date</label>
+          <div class="vs-con-input">
+            {{ $options.filters.date(eventDetail.endDate) }}
+          </div>
+        </div>
+
+        <!-- TIME START -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Time Start</label>
+          <div class="vs-con-input">
+            {{ eventDetail.timeStart }}
+          </div>
+        </div>
+
+        <!-- TIME END -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Time End</label>
+          <div class="vs-con-input">
+            {{ eventDetail.timeEnd }}
+          </div>
+        </div>
+
+        <!-- PLACE -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Place</label>
+          <div class="vs-con-input">
+            {{ eventDetail.place }}
+          </div>
+        </div>
+
+        <!-- ORGANIZER -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Organizer</label>
+          <div class="vs-con-input">
+            {{ eventDetail.organizer }}
+          </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Description</label>
+          <div class="vs-con-input">
+            {{ eventDetail.description }}
+          </div>
+        </div>
+
+        <!-- TYPE -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Type</label>
+          <div class="vs-con-input">
+            <vs-chip :color="getEventTypeColor(eventDetail.type)" class="event-type">{{ getTitleCase(eventDetail.type) }}</vs-chip>
+          </div>
+        </div>
+
+        <!-- FOR USERS -->
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary" v-if="eventDetail.type !== 'public'">
+          <label for="" class="vs-input--label">For Users</label>
+          <div class="vs-con-input flex-row justify-content-left">
+              <vs-chip color="danger" v-for="item in eventDetail.forUsers" :key="item.id">{{ item.label }}</vs-chip>
+          </div>
+        </div>
 
     </vs-prompt>
   </div>
@@ -254,9 +244,6 @@ export default {
     disabledDatesFrom () {
       return { from: new Date(this.endDate) }
     },
-    calendarLabels () {
-      return this.$store.state.calendar.eventLabels
-    },
     labelColor () {
       return (label) => {
         if      (label === 'business') return 'success'
@@ -267,14 +254,12 @@ export default {
     },
     windowWidth () {
       return this.$store.state.windowWidth
+    },
+    eventDetail () {
+      return this.$store.state.calendar.event
     }
   },
   methods: {
-    addEvent () {
-      const obj = { title: this.title, startDate: this.startDate, endDate: this.endDate, label: this.labelLocal, url: this.url }
-      obj.classes = `event-${  this.labelColor(this.labelLocal)}`
-      this.$store.dispatch('calendar/addEvent', obj)
-    },
     updateMonth (val) {
       this.showDate = this.$refs.calendar.getIncrementedPeriod(val)
     },
@@ -297,32 +282,27 @@ export default {
       this.disabledFrom = true
       this.addNewEventDialog(date)
     },
-    openEditEvent (event) {
-      const e = this.$store.getters['calendar/getEvent'](event.id)
-      this.id = e.id
-      this.title = e.title
-      this.startDate = e.startDate
-      this.endDate = e.endDate
-      this.url = e.url
-      this.labelLocal = e.label
+    openDetailEvent (event) {
+      this.$store.dispatch('calendar/fetchEventDetail', event.id)
       this.activePromptEditEvent = true
     },
-    editEvent () {
-      const obj = { id: this.id, title: this.title, startDate: this.startDate, endDate: this.endDate, label: this.labelLocal, url: this.url }
-      obj.classes = `event-${  this.labelColor(this.labelLocal)}`
-      this.$store.dispatch('calendar/editEvent', obj)
+    getEventStatusColor (status) {
+      if (parseInt(status) === 1) return 'success'
+      if (parseInt(status) === 0)  return 'danger'
     },
-    removeEvent () {
-      this.$store.dispatch('calendar/removeEvent', this.id)
+    getEventTypeColor (type) {
+      if (type === 'public') return 'primary'
+      if (type === 'specific')  return 'warning'
     },
-    eventDragged (event, date) {
-      this.$store.dispatch('calendar/eventDragged', {event, date})
+    getTitleCase (str = '') {
+      return str.toLowerCase().split(' ').map(function (word) {
+        return (word.charAt(0).toUpperCase() + word.slice(1))
+      }).join(' ')
     }
   },
   created () {
     this.$store.registerModule('calendar', moduleCalendar)
     this.$store.dispatch('calendar/fetchEvents')
-    this.$store.dispatch('calendar/fetchEventLabels')
   },
   beforeDestroy () {
     this.$store.unregisterModule('calendar')
@@ -332,4 +312,36 @@ export default {
 
 <style lang="scss">
 @import "@sass/vuexy/apps/simple-calendar.scss";
+
+.con-vs-dialog {
+
+.vs-dialog {
+
+    footer {
+      
+      .vs-dialog-accept-button {
+        display: none;
+      }
+
+    }
+
+  }
+
+}
+
+.vs-con-input {
+  padding-left: 5px;
+  font-weight: bold;
+}
+
+.vs-dialog-text {
+  overflow-x: auto;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+.justify-content-left {
+  justify-content: left !important;
+}
 </style>

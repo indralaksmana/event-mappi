@@ -198,25 +198,25 @@ export default {
       if (type === 'public') return 'primary'
       if (type === 'specific')  return 'warning'
     },
-    getTitleCase(str) {
+    getTitleCase (str) {
       return str.toLowerCase().split(' ').map(function (word) {
-        return (word.charAt(0).toUpperCase() + word.slice(1));
-      }).join(' ');
+        return (word.charAt(0).toUpperCase() + word.slice(1))
+      }).join(' ')
     },
     toggleDataSidebar (val = false) {
       this.addNewDataSidebar = val
     },
-    deleteConfirm(id) {
+    deleteConfirm (id) {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
-        title: `Confirm`,
+        title: 'Confirm',
         text: 'Are your sure to delete this event?',
         accept: this.acceptDelete,
         parameters: id 
       })
     },
-    acceptDelete(id) {
+    acceptDelete (id) {
       this.deleteData(id)
       this.$vs.notify({
         color: 'success',
@@ -224,16 +224,16 @@ export default {
         text: 'The selected event was successfully deleted'
       })
     },
-    destroyConfirm() {
+    destroyConfirm () {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
-        title: `Confirm`,
+        title: 'Confirm',
         text: 'Are your sure to delete these event?',
-        accept: this.acceptDestroy,
+        accept: this.acceptDestroy
       })
     },
-    acceptDestroy() {
+    acceptDestroy () {
       this.deleteAll()
       this.$vs.notify({
         color: 'success',
@@ -241,11 +241,11 @@ export default {
         text: 'All event was successfully deleted'
       })
     },
-    deleteAll() {
+    deleteAll () {
       const ids = []
       this.selected.map(selected => {
-          ids.push(selected._id);
-      });
+        ids.push(selected._id)
+      })
       this.$store.dispatch('eventList/removeAllEvent', ids).catch(err => { console.error(err) })
     }
   },
