@@ -47,14 +47,13 @@ Vue.filter('time', function (value, is24HrFormat = false) {
   }
 })
 
-Vue.filter('date', function (value, fullDate = false) {
-  value = String(value)
-  const date = value.slice(8, 10).trim()
-  const month = value.slice(4, 7).trim()
-  const year = value.slice(11, 15)
+Vue.filter('date', function (value) {
+  value = String(value).split('-')
+  const date = value[2]
+  const month = value[1]
+  const year = value[0]
 
-  if (!fullDate) return `${date} ${month}`
-  else return `${date} ${month} ${year}`
+  return `${date}-${month}-${year}`
 })
 
 Vue.filter('month', function (val, showYear = true) {

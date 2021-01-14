@@ -22,7 +22,8 @@
         icon-pack="feather"
         label-placeholder="Password"
         v-model="password"
-        class="w-full mt-6" />
+        class="w-full mt-6"
+        @keyup.enter="login" />
     <span class="text-danger text-sm">{{ errors.first('password') }}</span>
 
     <div class="flex flex-wrap justify-between my-5">
