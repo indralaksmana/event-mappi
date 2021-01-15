@@ -125,10 +125,7 @@ export default {
         {text:'Active', value: 1}
       ],
 
-      role_choices: [
-        {id: 'admin', label: 'Admin'},
-        {id: 'super_admin', label: 'Super Admin'}
-      ],
+      role_choices: [],
 
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
@@ -153,6 +150,20 @@ export default {
         this.dataDepartment = department
         this.dataRole = role
         this.dataImg = photo
+        this.sector_choices = []
+        this.sectors.map(sector => {
+          this.sector_choices.push({
+            id: sector._id,
+            label: sector.name
+          })  
+        })
+        this.role_choices = []
+        this.roles.map(role => {
+          this.role_choices.push({
+            id: role._id,
+            label: role.name
+          })  
+        })
       }
     }
   },
@@ -175,6 +186,9 @@ export default {
     scrollbarTag () { return this.$store.getters.scrollbarTag },
     sectors () {
       return this.$store.state.sector.sectors
+    },
+    roles () {
+      return this.$store.state.role.roles
     }
   },
   methods: {
@@ -193,6 +207,12 @@ export default {
         this.sector_choices.push({
           id: sector._id,
           label: sector.name
+        })  
+      })
+      this.roles.map(role => {
+        this.role_choices.push({
+          id: role._id,
+          label: role.name
         })  
       })
     },

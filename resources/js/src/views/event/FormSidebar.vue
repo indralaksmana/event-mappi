@@ -119,8 +119,8 @@
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import vSelect from 'vue-select'
-import flatPickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 
 export default {
   props: {
@@ -209,6 +209,13 @@ export default {
           this.user_choices.push({
             id: user._id,
             label: user.name
+          })  
+        })
+        this.sector_choices = []
+        this.sectors.map(sector => {
+          this.sector_choices.push({
+            id: sector._id,
+            label: sector.name
           })  
         })
       }
