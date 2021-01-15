@@ -115,6 +115,7 @@
 import FormSidebar from './FormSidebar.vue'
 import moduleSector from '@/store/sector/moduleSector.js'
 import moduleUser from '@/store/user/moduleUser.js'
+import moduleRole from '@/store/role/moduleRole.js'
 
 export default {
   components: {
@@ -227,8 +228,13 @@ export default {
       this.$store.registerModule('user', moduleUser)
       moduleUser.isRegistered = true
     }
+    if (!moduleRole.isRegistered) {
+      this.$store.registerModule('role', moduleRole)
+      moduleRole.isRegistered = true
+    }
     this.$store.dispatch('sector/fetchSectorItems')
     this.$store.dispatch('user/fetchUserItems')
+    this.$store.dispatch('role/fetchRoleItems')
   },
   mounted () {
     this.isMounted = true

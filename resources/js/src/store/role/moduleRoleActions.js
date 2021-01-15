@@ -1,51 +1,51 @@
 import axios from '@/axios.js'
 
 export default {
-  addSector ({ commit }, sector) {
+  addRole ({ commit }, role) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/sector/add', {sector})
+      axios.post('/api/role/add', {role})
         .then((response) => {
-          commit('ADD_SECTOR', Object.assign(sector, {id: response.data.id}))
+          commit('ADD_ROLE', Object.assign(role, {id: response.data.id}))
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  fetchSectorItems ({ commit }) {
+  fetchRoleItems ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get('/api/sector')
+      axios.get('/api/role')
         .then((response) => {
-          commit('SET_SECTORS', response.data.data)
+          commit('SET_ROLES', response.data.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  updateSector ({ commit }, sector) {
+  updateRole ({ commit }, role) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/sector/edit/${sector.id}`, {sector})
+      axios.put(`/api/role/edit/${role.id}`, {role})
         .then((response) => {
-          commit('UPDATE_SECTOR', response.data)
+          commit('UPDATE_ROLE', response.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  removeSector ({ commit }, sectorId) {
+  removeRole ({ commit }, roleId) {
     return new Promise((resolve, reject) => {
-      axios.delete(`/api/sector/${sectorId}`)
+      axios.delete(`/api/role/${roleId}`)
         .then((response) => {
-          commit('REMOVE_SECTOR', sectorId)
+          commit('REMOVE_ROLE', roleId)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  removeAllSector ({ commit }, sectorIds) {
+  removeAllRole ({ commit }, roleIds) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/sector/destroy', {sectorIds})
+      axios.post('/api/role/destroy', {roleIds})
         .then((response) => {
-          commit('REMOVE_SECTORS', sectorIds)
+          commit('REMOVE_ROLES', roleIds)
           resolve(response)
         })
         .catch((error) => { reject(error) })

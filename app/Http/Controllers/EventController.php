@@ -11,8 +11,13 @@ class EventController extends Controller
         try {
 
             $calendarEvents = [];
-            $publicEvents = Event::where('type', 'public')->get();
-            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])->get();
+            $publicEvents = Event::where('type', 'public')
+                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
+                                    ->get();
+            $specificEvents = Event::where('type', 'specific')
+                                    ->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])
+                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
+                                    ->get();
             $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
@@ -46,9 +51,13 @@ class EventController extends Controller
 
     public function read(Request $request) {
         try {
-            
-            $publicEvents = Event::where('type', 'public')->get();
-            $specificEvents = Event::where('type', 'specific')->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])->get();
+            $publicEvents = Event::where('type', 'public')
+                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
+                                    ->get();
+            $specificEvents = Event::where('type', 'specific')
+                                    ->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])
+                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
+                                    ->get();
             $events = count($publicEvents) > 0 ? $publicEvents->merge($specificEvents) : $specificEvents;
             
             return response()->json([

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['api', 'cors']], function () {
         
-    Route::post('auth/login', 'AuthController@login');
+    Route::post('auth/login', 'AuthController@login')->name('login');;
     
     Route::post('auth/refresh-token', 'AuthController@refresh');
 
@@ -49,6 +49,12 @@ Route::group(['middleware' => ['api', 'cors']], function () {
             Route::post('edit/{id}','UserController@update');
             Route::delete('{id}','UserController@delete');
             Route::post('/destroy','UserController@deleteAll');
+        });
+
+        // Role Routes
+        Route::prefix('role')->group(function () {
+            Route::get('/','RoleController@read');
+            Route::post('add','RoleController@store');
         });
 
     });

@@ -77,7 +77,7 @@
         <!-- NAME -->
         <div class="vs-component vs-con-input-label vs-input mt-0 w-full vs-input-primary">
           <label for="" class="vs-input--label">Name</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.name }}
           </div>
         </div>
@@ -85,7 +85,7 @@
         <!-- CATEGORY -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Category</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.category }}
           </div>
         </div>
@@ -93,7 +93,7 @@
         <!-- SECTOR -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Sector</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.sector }}
           </div>
         </div>
@@ -101,7 +101,7 @@
         <!-- STATUS -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Status</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             <vs-chip :color="getEventStatusColor(eventDetail.status)" class="event-status">{{ parseInt(eventDetail.status, 0) === 1 ? 'Active' : 'Unactive' }}</vs-chip>
           </div>
         </div>
@@ -109,7 +109,7 @@
         <!-- START DATE -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Start Date</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ $options.filters.date(eventDetail.startDate) }}
           </div>
         </div>
@@ -117,7 +117,7 @@
         <!-- END DATE -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">End Date</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ $options.filters.date(eventDetail.endDate) }}
           </div>
         </div>
@@ -125,7 +125,7 @@
         <!-- TIME START -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Time Start</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.timeStart }}
           </div>
         </div>
@@ -133,7 +133,7 @@
         <!-- TIME END -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Time End</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.timeEnd }}
           </div>
         </div>
@@ -141,7 +141,7 @@
         <!-- PLACE -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Place</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.place }}
           </div>
         </div>
@@ -149,7 +149,7 @@
         <!-- ORGANIZER -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Organizer</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.organizer }}
           </div>
         </div>
@@ -157,7 +157,7 @@
         <!-- DESCRIPTION -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Description</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             {{ eventDetail.description }}
           </div>
         </div>
@@ -165,7 +165,7 @@
         <!-- TYPE -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Type</label>
-          <div class="vs-con-input">
+          <div class="vs-con-input event-detail">
             <vs-chip :color="getEventTypeColor(eventDetail.type)" class="event-type">{{ getTitleCase(eventDetail.type) }}</vs-chip>
           </div>
         </div>
@@ -329,7 +329,7 @@ export default {
 
 }
 
-.vs-con-input {
+.vs-con-input.event-detail {
   padding-left: 5px;
   font-weight: bold;
 }
