@@ -5,6 +5,9 @@ export default {
   SET_EVENTS (state, events) {
     state.events = events
   },
+  SET_NOTIFICATON_EVENTS (state, events) {
+    state.eventNotifications = events
+  },
   UPDATE_EVENT (state, event) {
     const eventIndex = state.events.findIndex((p) => p.id === event.id)
     Object.assign(state.events[eventIndex], event)

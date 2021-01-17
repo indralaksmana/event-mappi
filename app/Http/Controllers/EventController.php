@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Category;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -47,6 +48,56 @@ class EventController extends Controller
                 'success' => true,
                 'message' => '',
                 'data' => $calendarEvents
+            ], 200);
+
+        } catch(\Exception $err) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $err->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
+
+    public function readNotification () {
+        try {
+
+            $notificationEvents = [];
+            $tomorrow = Carbon::tomorrow();
+            
+            $queryPublicEvents = Event::query();
+            $queryPublicEvents->where('type', 'public');
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $queryPublicEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
+            $queryPublicEvents->where('startDate', $tomorrow->format('Y-m-j'));
+            $publicEvents = $queryPublicEvents->get();
+            
+            $querySpecificEvents = Event::query();
+            $querySpecificEvents->where('type', 'specific');
+            $querySpecificEvents->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]]);
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $querySpecificEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
+            $querySpecificEvents->where('startDate', $tomorrow->format('Y-m-j'));
+            $specificEvents = $querySpecificEvents->get();
+            
+            $events = $publicEvents->merge($specificEvents);
+            
+            $i = 0;
+            foreach($events as $event) {
+                $notificationEvents[$i]['id'] = $event['_id'];
+                $notificationEvents[$i]['title'] = '['.$event['category']['label'].'] '.$event['name'];
+                $notificationEvents[$i]['msg'] = '<b>Bidang:</b> '.$event['sector']['label'].' <br/> <b>Tanggal:</b> '.getIndonesianDate($event['startDate']).' s.d. '.getIndonesianDate($event['endDate']).' <br/> <b>Pukul:</b> '.getShortTime($event['timeStart']).' s.d. '.getShortTime($event['timeEnd']).' WIB';
+
+                $i++;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => '',
+                'data' => $notificationEvents
             ], 200);
 
         } catch(\Exception $err) {
