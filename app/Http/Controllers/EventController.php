@@ -12,13 +12,22 @@ class EventController extends Controller
         try {
 
             $calendarEvents = [];
-            $publicEvents = Event::where('type', 'public')
-                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
-                                    ->get();
-            $specificEvents = Event::where('type', 'specific')
-                                    ->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])
-                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
-                                    ->get();
+            
+            $queryPublicEvents = Event::query();
+            $queryPublicEvents->where('type', 'public');
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $queryPublicEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
+            $publicEvents = $queryPublicEvents->get();
+            
+            $querySpecificEvents = Event::query();
+            $querySpecificEvents->where('type', 'specific');
+            $querySpecificEvents->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]]);
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $querySpecificEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
+            $specificEvents = $querySpecificEvents->get();
+            
             $events = $publicEvents->merge($specificEvents);
             
             $i = 0;
@@ -54,7 +63,9 @@ class EventController extends Controller
         try {
             $queryPublicEvents = Event::query();
             $queryPublicEvents->where('type', 'public');
-            $queryPublicEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $queryPublicEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
             if ($request->has('category') && $request->input('category') !== 'all' && $request->input('category') !== null) {
                 $category = Category::find($request->input('category'));
                 $queryPublicEvents->whereIn('category', ["0" => ["id" => $category->_id, "label" => $category->name]]);
@@ -67,7 +78,9 @@ class EventController extends Controller
             $querySpecificEvents = Event::query();
             $querySpecificEvents->where('type', 'specific');
             $querySpecificEvents->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]]);
-            $querySpecificEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            if (strtolower(auth()->user()->role['label']) !== 'admin') {
+                $querySpecificEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            }
             if ($request->has('category') && $request->input('category') !== 'all' && $request->input('category') !== null) {
                 $category = Category::find($request->input('category'));
                 $querySpecificEvents->whereIn('category', ["0" => ["id" => $category->_id, "label" => $category->name]]);
