@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Category;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -51,13 +52,31 @@ class EventController extends Controller
 
     public function read(Request $request) {
         try {
-            $publicEvents = Event::where('type', 'public')
-                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
-                                    ->get();
-            $specificEvents = Event::where('type', 'specific')
-                                    ->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]])
-                                    ->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]])
-                                    ->get();
+            $queryPublicEvents = Event::query();
+            $queryPublicEvents->where('type', 'public');
+            $queryPublicEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            if ($request->has('category') && $request->input('category') !== 'all' && $request->input('category') !== null) {
+                $category = Category::find($request->input('category'));
+                $queryPublicEvents->whereIn('category', ["0" => ["id" => $category->_id, "label" => $category->name]]);
+            }
+            if ($request->has('status') && $request->input('status') !== 'all' && $request->input('status') !== null) {
+                $queryPublicEvents->where('status', (int)$request->input('status'));
+            }
+            $publicEvents = $queryPublicEvents->get();
+            
+            $querySpecificEvents = Event::query();
+            $querySpecificEvents->where('type', 'specific');
+            $querySpecificEvents->whereIn('forUsers', ["0" => ["id" => auth()->user()->_id, "label" => auth()->user()->name]]);
+            $querySpecificEvents->whereIn('sector', ["0" => ["id" => auth()->user()->sector['id'], "label" => auth()->user()->sector['label']]]);
+            if ($request->has('category') && $request->input('category') !== 'all' && $request->input('category') !== null) {
+                $category = Category::find($request->input('category'));
+                $querySpecificEvents->whereIn('category', ["0" => ["id" => $category->_id, "label" => $category->name]]);
+            }
+            if ($request->has('status') && $request->input('status') !== 'all' && $request->input('status') !== null) {
+                $querySpecificEvents->where('status', (int)$request->input('status'));
+            }
+            $specificEvents = $querySpecificEvents->get();
+            
             $events = count($publicEvents) > 0 ? $publicEvents->merge($specificEvents) : $specificEvents;
             
             return response()->json([
