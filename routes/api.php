@@ -57,6 +57,12 @@ Route::group(['middleware' => ['api', 'cors']], function () {
             Route::post('add','RoleController@store');
         });
 
+        // Category Routes
+        Route::prefix('category')->group(function () {
+            Route::get('/','CategoryController@read');
+            Route::post('add','CategoryController@store');
+        });
+
     });
 
 });

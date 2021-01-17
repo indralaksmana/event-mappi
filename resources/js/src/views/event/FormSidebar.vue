@@ -11,18 +11,24 @@
       <div class="p-6">
 
         <!-- NAME -->
-        <vs-input label="Name" v-model="dataName" class="mt-5 w-full" name="event-name" v-validate="'required'" />
-        <span class="text-danger text-sm" v-show="errors.has('event-name')">{{ errors.first('event-name') }}</span>
+        <vs-input label="Name" v-model="dataName" class="mt-5 w-full" name="name" v-validate="'required'" />
+        <span class="text-danger text-sm" v-show="errors.has('name')">{{ errors.first('name') }}</span>
 
         <!-- CATEGORY -->
-        <vs-input label="Category" v-model="dataCategory" class="mt-5 w-full" name="event-category" v-validate="'required'" />
-        <span class="text-danger text-sm" v-show="errors.has('event-category')">{{ errors.first('event-category') }}</span>
+        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+          <label for="" class="vs-input--label">Category</label>
+          <div class="vs-con-input">
+            <v-select v-model="dataCategory" :options="category_choices" class="w-full" name="category" v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('category')">{{ errors.first('category') }}</span>
+          </div>
+        </div>
 
         <!-- SECTOR -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Sector</label>
           <div class="vs-con-input">
-            <v-select v-model="dataSector" :options="sector_choices" class="w-full" />
+            <v-select v-model="dataSector" :options="sector_choices" class="w-full" name="sector" v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('sector')">{{ errors.first('sector') }}</span>
           </div>
         </div>
 
@@ -32,9 +38,10 @@
           <div class="vs-con-input">
             <ul class="mt-1 ml-2">
               <li :key="item.value" v-for="item in event_status_choices" class="float-right mr-10">
-                <vs-radio v-model="dataStatus" :vs-value="item.value">{{ item.text }}</vs-radio>
+                <vs-radio v-model="dataStatus" :vs-value="item.value" name="status" v-validate="'required'">{{ item.text }}</vs-radio>
               </li>
             </ul>
+            <span class="text-danger text-sm" v-show="errors.has('status')">{{ errors.first('status') }}</span>
           </div>
         </div>
 
@@ -42,7 +49,8 @@
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Start Date</label>
           <div class="vs-con-input">
-            <flat-pickr v-model="dataStartDate" class="w-full"/>
+            <flat-pickr v-model="dataStartDate" class="w-full" name="start date" v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('start date')">{{ errors.first('start date') }}</span>
           </div>
         </div>
 
@@ -50,39 +58,43 @@
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">End Date</label>
           <div class="vs-con-input">
-            <flat-pickr v-model="dataEndDate" class="w-full"/>
+            <flat-pickr v-model="dataEndDate" class="w-full" name="end date" v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('end date')">{{ errors.first('end date') }}</span>
           </div>
         </div>
 
         <!-- TIME START -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-          <label for="" class="vs-input--label">Time Start</label>
+          <label for="" class="vs-input--label">Start Time</label>
           <div class="vs-con-input">
-            <flat-pickr :config="configdateTimePicker" v-model="dataTimeStart" class="w-full"/>
+            <flat-pickr :config="configdateTimePicker" v-model="dataTimeStart" class="w-full" name="start time" v-validate="'required'"/>
+            <span class="text-danger text-sm" v-show="errors.has('start time')">{{ errors.first('start time') }}</span>
           </div>
         </div>
 
         <!-- TIME END -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-          <label for="" class="vs-input--label">Time End</label>
+          <label for="" class="vs-input--label">End Time</label>
           <div class="vs-con-input">
-            <flat-pickr :config="configdateTimePicker" v-model="dataTimeEnd" class="w-full"/>
+            <flat-pickr :config="configdateTimePicker" v-model="dataTimeEnd" class="w-full" name="end time" v-validate="'required'"/>
+            <span class="text-danger text-sm" v-show="errors.has('end time')">{{ errors.first('end time') }}</span>
           </div>
         </div>
 
         <!-- PLACE -->
-        <vs-input label="Place" v-model="dataPlace" class="mt-5 w-full" name="event-place" v-validate="'required'" />
-        <span class="text-danger text-sm" v-show="errors.has('event-place')">{{ errors.first('event-place') }}</span>
+        <vs-input label="Place" v-model="dataPlace" class="mt-5 w-full" name="place" v-validate="'required'" />
+        <span class="text-danger text-sm" v-show="errors.has('place')">{{ errors.first('place') }}</span>
 
         <!-- ORGANIZER -->
-        <vs-input label="Organizer" v-model="dataOrganizer" class="mt-5 w-full" name="organizer-place" v-validate="'required'" />
-        <span class="text-danger text-sm" v-show="errors.has('organizer-place')">{{ errors.first('organizer-place') }}</span>
+        <vs-input label="Organizer" v-model="dataOrganizer" class="mt-5 w-full" name="organizer" v-validate="'required'" />
+        <span class="text-danger text-sm" v-show="errors.has('organizer')">{{ errors.first('organizer') }}</span>
 
         <!-- DESCRIPTION -->
         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
           <label for="" class="vs-input--label">Description</label>
           <div class="vs-con-input">
-            <vs-textarea v-model="dataDescription" />
+            <vs-textarea v-model="dataDescription" name="description" v-validate="'required'" />
+            <span class="text-danger text-sm" v-show="errors.has('description')">{{ errors.first('description') }}</span>
           </div>
         </div>
 
@@ -92,9 +104,10 @@
           <div class="vs-con-input">
             <ul class="mt-1 ml-2">
               <li :key="item.value" v-for="item in event_type_choices" class="float-right mr-10">
-                <vs-radio v-model="dataType" :vs-value="item.value" @change="onchangeType">{{ item.text }}</vs-radio>
+                <vs-radio v-model="dataType" :vs-value="item.value" @change="onchangeType" name="type" v-validate="'required'">{{ item.text }}</vs-radio>
               </li>
             </ul>
+            <span class="text-danger text-sm" v-show="errors.has('type')">{{ errors.first('type') }}</span>
           </div>
         </div>
 
@@ -169,6 +182,7 @@ export default {
       ],
 
       user_choices: [],
+      category_choices: [],
 
       settings: { // perfectscrollbar settings
         maxScrollbarLength: 60,
@@ -218,6 +232,13 @@ export default {
             label: sector.name
           })  
         })
+        this.category_choices = []
+        this.categories.map(category => {
+          this.category_choices.push({
+            id: category._id,
+            label: category.name
+          })  
+        })
       }
     }
   },
@@ -235,7 +256,7 @@ export default {
       }
     },
     isFormValid () {
-      return !this.errors.any() && this.dataName && this.dataCategory
+      return !this.errors.any()
     },
     scrollbarTag () { return this.$store.getters.scrollbarTag },
     sectors () {
@@ -243,6 +264,9 @@ export default {
     },
     users () {
       return this.$store.state.user.users
+    },
+    categories () {
+      return this.$store.state.category.categories
     }
   },
   methods: {
@@ -271,6 +295,12 @@ export default {
           id: user._id,
           label: user.name
         })  
+      })
+      this.categories.map(category => {
+        this.category_choices.push({
+          id: category._id,
+          label: category.name
+        })
       })
       this.dataType = null
       this.dataForUsers = []
@@ -304,7 +334,7 @@ export default {
 
           this.$emit('closeSidebar')
           this.initValues()
-          this.$store.dispatch('eventList/fetchEventListItems')
+          this.$store.dispatch('eventList/fetchEventListItems', '')
         }
       })
     },

@@ -1,51 +1,51 @@
 import axios from '@/axios.js'
 
 export default {
-  addEvent ({ commit }, event) {
+  addCategory ({ commit }, category) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/event/add', {event})
+      axios.post('/api/category/add', {category})
         .then((response) => {
-          commit('ADD_EVENT', Object.assign(event, {id: response.data.id}))
+          commit('ADD_CATEGORY', Object.assign(category, {id: response.data.id}))
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  fetchEventListItems ({ commit }, query) {
+  fetchCategoryItems ({ commit }) {
     return new Promise((resolve, reject) => {
-      axios.get(`/api/event${query}`)
+      axios.get('/api/category')
         .then((response) => {
-          commit('SET_EVENTS', response.data.data)
+          commit('SET_CATEGORIES', response.data.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  updateEvent ({ commit }, event) {
+  updateCategory ({ commit }, category) {
     return new Promise((resolve, reject) => {
-      axios.put(`/api/event/edit/${event.id}`, {event})
+      axios.put(`/api/category/edit/${category.id}`, {category})
         .then((response) => {
-          commit('UPDATE_EVENT', response.data)
+          commit('UPDATE_CATEGORY', response.data)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  removeEvent ({ commit }, eventId) {
+  removeCategory ({ commit }, categoryId) {
     return new Promise((resolve, reject) => {
-      axios.delete(`/api/event/${eventId}`)
+      axios.delete(`/api/category/${categoryId}`)
         .then((response) => {
-          commit('REMOVE_EVENT', eventId)
+          commit('REMOVE_CATEGORY', categoryId)
           resolve(response)
         })
         .catch((error) => { reject(error) })
     })
   },
-  removeAllEvent ({ commit }, eventIds) {
+  removeAllCategory ({ commit }, categoryIds) {
     return new Promise((resolve, reject) => {
-      axios.post('/api/event/destroy', {eventIds})
+      axios.post('/api/category/destroy', {categoryIds})
         .then((response) => {
-          commit('REMOVE_EVENTS', eventIds)
+          commit('REMOVE_CATEGORIES', categoryIds)
           resolve(response)
         })
         .catch((error) => { reject(error) })

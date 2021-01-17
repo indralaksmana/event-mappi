@@ -1,6 +1,22 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
+    <vx-card class="mb-10" title="Filters">
+      <div class="vx-row">
+        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
+          <label class="text-sm opacity-75">Category</label>
+          <v-select :options="categoryOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="categoryFilter" @input="filterEvents" class="mb-4 md:mb-0" />
+        </div>
+        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
+          <label class="text-sm opacity-75">Status</label>
+          <v-select :options="statusOptions" :clearable="false" :dir="$vs.rtl ? 'rtl' : 'ltr'" v-model="statusFilter" @input="filterEvents" class="mb-4 md:mb-0" />
+        </div>
+        <div class="vx-col md:w-1/4 sm:w-1/2 w-full">
+          <vs-button type="border" color="danger" icon-pack="feather" icon="icon-refresh-cw" class="mt-6" @click="resetFilter">Reset</vs-button>
+        </div>
+      </div>
+    </vx-card>
+    
     <form-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="toggleDataSidebar" :data="sidebarData" />
 
     <vs-table ref="table" multiple v-model="selected" pagination :max-items="itemsPerPage" search :data="events">
@@ -86,7 +102,7 @@
               </vs-td>
 
               <vs-td>
-                <p class="event-category">{{ tr.category | title }}</p>
+                <p class="event-category">{{ tr.category.label | title }}</p>
               </vs-td>
 
               <vs-td>
@@ -144,12 +160,15 @@
 <script>
 import FormSidebar from './FormSidebar.vue'
 import moduleEventList from '@/store/event/moduleEventList.js'
+import moduleCategory from '@/store/category/moduleCategory.js'
 import moduleSector from '@/store/sector/moduleSector.js'
 import moduleUser from '@/store/user/moduleUser.js'
+import vSelect from 'vue-select'
 
 export default {
   components: {
-    FormSidebar
+    FormSidebar,
+    vSelect
   },
   data () {
     return {
@@ -161,7 +180,14 @@ export default {
       // Data Sidebar
       addNewDataSidebar: false,
       sidebarData: {},
-      activeConfirm: false
+      activeConfirm: false,
+      categoryFilter: { label: 'All', id: 'all' },
+      categoryOptions: [],
+      statusFilter: { label: 'All', id: 'all' },
+      statusOptions: [
+        { label:'Unactive', id: 0 },
+        { label:'Active', id: 1 }
+      ]
     }
   },
   computed: {
@@ -176,6 +202,9 @@ export default {
     },
     queriedItems () {
       return this.$refs.table ? this.$refs.table.queriedResults.length : this.events.length
+    },
+    categories () {
+      return this.$store.state.category.categories
     }
   },
   methods: {
@@ -247,6 +276,14 @@ export default {
         ids.push(selected._id)
       })
       this.$store.dispatch('eventList/removeAllEvent', ids).catch(err => { console.error(err) })
+    },
+    resetFilter () {
+      this.categoryFilter = { label: 'All', id: 'all' }
+      this.statusFilter = { label: 'All', id: 'all' }
+      this.$store.dispatch('eventList/fetchEventListItems', '')
+    },
+    filterEvents () {
+      this.$store.dispatch('eventList/fetchEventListItems', `?category=${this.categoryFilter.id}&status=${this.statusFilter.id}`)
     }
   },
   created () {
@@ -262,9 +299,21 @@ export default {
       this.$store.registerModule('user', moduleUser)
       moduleUser.isRegistered = true
     }
-    this.$store.dispatch('eventList/fetchEventListItems')
+    if (!moduleCategory.isRegistered) {
+      this.$store.registerModule('category', moduleCategory)
+      moduleCategory.isRegistered = true
+    }
+    this.$store.dispatch('eventList/fetchEventListItems', '')
     this.$store.dispatch('sector/fetchSectorItems')
     this.$store.dispatch('user/fetchUserItems')
+    this.$store.dispatch('category/fetchCategoryItems').then(() => {
+      this.categories.map(category => {
+        this.categoryOptions.push({
+          id: category._id,
+          label: category.name
+        })
+      })
+    })
   },
   mounted () {
     this.isMounted = true
