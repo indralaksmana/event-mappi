@@ -21,6 +21,16 @@ export default {
         .catch((error) => { reject(error) })
     })
   },
+  fetchEventNotifcationItems ({ commit }) {
+    return new Promise((resolve, reject) => {
+      axios.get('/api/event/notification')
+        .then((response) => {
+          commit('SET_NOTIFICATON_EVENTS', response.data.data)
+          resolve(response)
+        })
+        .catch((error) => { reject(error) })
+    })
+  },
   updateEvent ({ commit }, event) {
     return new Promise((resolve, reject) => {
       axios.put(`/api/event/edit/${event.id}`, {event})

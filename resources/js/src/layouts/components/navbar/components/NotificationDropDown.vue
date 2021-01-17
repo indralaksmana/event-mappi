@@ -10,22 +10,21 @@
         <p class="opacity-75">App Notifications</p>
       </div>
 
-      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings" :key="$vs.rtl">
+      <component :is="scrollbarTag" ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-0" :settings="settings" :key="$vs.rtl">
         <ul class="bordered-items">
-          <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
+          <li v-for="ntf in unreadNotifications" :key="ntf.id" class="flex justify-between px-4 py-4 notification cursor-pointer">
             <div class="flex items-start">
-              <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
+              <feather-icon icon="CalendarIcon" :svgClasses="['text-danger', 'stroke-current mr-1 h-6 w-6']"></feather-icon>
               <div class="mx-2">
-                <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
-                <small>{{ ntf.msg }}</small>
+                <span class="font-medium block notification-title" :class="['text-danger']">{{ ntf.title }}</span>
+                <small v-html="ntf.msg">{{ ntf.msg }}</small>
               </div>
             </div>
-            <small class="mt-1 whitespace-no-wrap">{{ elapsedTime(ntf.time) }}</small>
           </li>
         </ul>
       </component>
 
-      <div class="
+      <!-- <div class="
         checkout-footer
         fixed
         bottom-0
@@ -43,13 +42,14 @@
         d-theme-border-grey-light
         cursor-pointer">
         <span>View All Notifications</span>
-      </div>
+      </div> -->
     </vs-dropdown-menu>
   </vs-dropdown>
 </template>
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import moduleEventList from '@/store/event/moduleEventList.js'
 
 export default {
   components: {
@@ -57,44 +57,6 @@ export default {
   },
   data () {
     return {
-      unreadNotifications: [
-        {
-          index    : 0,
-          title    : 'New Message',
-          msg      : 'Are your going to meet me tonight?',
-          icon     : 'MessageSquareIcon',
-          time     : this.randomDate({sec: 10}),
-          category : 'primary'
-        },
-        { index    : 1,
-          title    : 'New Order Recieved',
-          msg      : 'You got new order of goods.',
-          icon     : 'PackageIcon',
-          time     : this.randomDate({sec: 40}),
-          category : 'success'
-        },
-        { index    : 2,
-          title    : 'Server Limit Reached!',
-          msg      : 'Server have 99% CPU usage.',
-          icon     : 'AlertOctagonIcon',
-          time     : this.randomDate({min: 1}),
-          category : 'danger'
-        },
-        { index    : 3,
-          title    : 'New Mail From Peter',
-          msg      : 'Cake sesame snaps cupcake',
-          icon     : 'MailIcon',
-          time     : this.randomDate({min: 6}),
-          category : 'primary'
-        },
-        { index    : 4,
-          title    : 'Bruce\'s Party',
-          msg      : 'Chocolate cake oat cake tiramisu',
-          icon     : 'CalendarIcon',
-          time     : this.randomDate({hr: 2}),
-          category : 'warning'
-        }
-      ],
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: .60
@@ -102,7 +64,10 @@ export default {
     }
   },
   computed: {
-    scrollbarTag () { return this.$store.getters.scrollbarTag }
+    scrollbarTag () { return this.$store.getters.scrollbarTag },
+    unreadNotifications () {
+      return this.$store.state.eventList.eventNotifications
+    }
   },
   methods: {
     elapsedTime (startTime) {
@@ -149,6 +114,13 @@ export default {
 
       return date
     }
+  },
+  created () {
+    if (!moduleEventList.isRegistered) {
+      this.$store.registerModule('eventList', moduleEventList)
+      moduleEventList.isRegistered = true
+    }
+    this.$store.dispatch('eventList/fetchEventNotifcationItems')
   }
 }
 

@@ -32,6 +32,7 @@ Route::group(['middleware' => ['api', 'cors']], function () {
         Route::prefix('event')->group(function () {
             Route::get('/','EventController@read');
             Route::get('calendar','EventController@readCalendar');
+            Route::get('notification','EventController@readNotification');
             Route::get('/detail/{id}','EventController@readDetail');
             Route::post('add','EventController@store');
             Route::put('edit/{id}','EventController@update');
